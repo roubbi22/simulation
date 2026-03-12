@@ -1,0 +1,224 @@
+{
+    "segments": {
+        "4ef2e5d2-a31d-4e20-9be3-a4419adbed22": {
+            "type": "st",
+            "connections": {
+                "a": null,
+                "b": "ee03c4cb-11fd-4a9d-ab4f-ff59bef7fc75.a"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    -0.0
+                ],
+                "b": [
+                    200.0,
+                    0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    0,
+                    0,
+                    90
+                ]
+            }
+        },
+        "ee03c4cb-11fd-4a9d-ab4f-ff59bef7fc75": {
+            "type": "cl",
+            "connections": {
+                "a": "4ef2e5d2-a31d-4e20-9be3-a4419adbed22.b",
+                "b": "df4c89ff-4630-44ff-a10a-569af4c2920c.a"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    -0.0
+                ],
+                "b": [
+                    400.0,
+                    53.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    200.0,
+                    -0.0,
+                    90
+                ]
+            }
+        },
+        "df4c89ff-4630-44ff-a10a-569af4c2920c": {
+            "type": "cl",
+            "connections": {
+                "a": "ee03c4cb-11fd-4a9d-ab4f-ff59bef7fc75.b",
+                "b": "eb3c4d5f-a9de-47c6-bee2-d3c7b7ff6107.a"
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    53.59
+                ],
+                "b": [
+                    546.41,
+                    200.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    400.0,
+                    -53.59,
+                    60
+                ]
+            }
+        },
+        "eb3c4d5f-a9de-47c6-bee2-d3c7b7ff6107": {
+            "type": "cl",
+            "connections": {
+                "a": "df4c89ff-4630-44ff-a10a-569af4c2920c.b",
+                "b": "e37f9c19-3674-4b98-8f16-6a774d58612e.a"
+            },
+            "location": {
+                "a": [
+                    546.41,
+                    200.0
+                ],
+                "b": [
+                    600.0,
+                    400.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    546.41,
+                    -200.0,
+                    30
+                ]
+            }
+        },
+        "e37f9c19-3674-4b98-8f16-6a774d58612e": {
+            "type": "cl",
+            "connections": {
+                "a": "eb3c4d5f-a9de-47c6-bee2-d3c7b7ff6107.b",
+                "b": "acb2b05c-a6cb-4ad6-b453-d225adb52112.a"
+            },
+            "location": {
+                "a": [
+                    600.0,
+                    400.0
+                ],
+                "b": [
+                    546.41,
+                    600.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    600.0,
+                    -400.0,
+                    0
+                ]
+            }
+        },
+        "acb2b05c-a6cb-4ad6-b453-d225adb52112": {
+            "type": "cl",
+            "connections": {
+                "a": "e37f9c19-3674-4b98-8f16-6a774d58612e.b",
+                "b": "b5b61499-7e9a-470a-91e4-a28fc9eaa826.a"
+            },
+            "location": {
+                "a": [
+                    546.41,
+                    600.0
+                ],
+                "b": [
+                    400.0,
+                    746.41
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    546.41,
+                    -600.0,
+                    330
+                ]
+            }
+        },
+        "b5b61499-7e9a-470a-91e4-a28fc9eaa826": {
+            "type": "cl",
+            "connections": {
+                "a": "acb2b05c-a6cb-4ad6-b453-d225adb52112.b",
+                "b": "34bf691a-45a3-4392-a8e3-186457d4fcb5.a"
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    746.41
+                ],
+                "b": [
+                    200.0,
+                    800.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    400.0,
+                    -746.41,
+                    300
+                ]
+            }
+        },
+        "34bf691a-45a3-4392-a8e3-186457d4fcb5": {
+            "type": "st",
+            "connections": {
+                "a": "b5b61499-7e9a-470a-91e4-a28fc9eaa826.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    800.0
+                ],
+                "b": [
+                    0.0,
+                    800.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    200.0,
+                    -800.0,
+                    270
+                ]
+            }
+        }
+    }
+}

@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QGraphicsScene
 from models.segments import BaseSegment, SegmentStraight , SegmentCurve, SegmentSwitch, SegmentEnd
-from custom_types.SegmentTypes import SegmentType
+from custom_types import SegmentType
 from typing import Dict
 import uuid
 import json
@@ -26,8 +26,6 @@ class Track:
         """
         if not segment_id:
             segment_id = str(uuid.uuid4())
-
-        print(kwargs)
 
         if coords:
             match segment_type:
@@ -132,13 +130,12 @@ class Track:
         """
         load track from file
         """
-        
+
         with open(file_path) as file:
             data = json.load(file)
 
         new_segments = data["segments"]
 
-        print(file.__dict__.values())
         for segment in self.segments.values():
             self.scene.removeItem(segment.graphical_representation)
         
@@ -171,8 +168,6 @@ class Track:
             for kwarg_key, kwarg_value in additional_kwargs.items():
                 if kwarg_value:
                     add_segment_kwargs[kwarg_key] = kwarg_value
-
-            print(add_segment_kwargs.values())
 
             self.add_segment(
                 **add_segment_kwargs

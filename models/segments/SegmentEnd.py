@@ -1,4 +1,4 @@
-from custom_types.EndVector import EndVector
+from custom_types import EndVector
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING: 
