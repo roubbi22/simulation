@@ -1,0 +1,92 @@
+{
+    "segments": {
+        "9b4b4ad1-7292-4285-a0db-93fce338a96e": {
+            "type": "st",
+            "connections": {
+                "a": null,
+                "b": "4bac358c-8c03-4d86-b655-bc25e595e1b3.a"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    -0.0
+                ],
+                "b": [
+                    200.0,
+                    0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    0,
+                    0,
+                    90
+                ]
+            }
+        },
+        "4bac358c-8c03-4d86-b655-bc25e595e1b3": {
+            "type": "cl",
+            "connections": {
+                "a": "9b4b4ad1-7292-4285-a0db-93fce338a96e.b",
+                "b": "bb357193-0469-4350-ac92-32ef7ee36b3e.a"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    -0.0
+                ],
+                "b": [
+                    400.0,
+                    53.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    200.0,
+                    -0.0,
+                    90
+                ]
+            }
+        },
+        "bb357193-0469-4350-ac92-32ef7ee36b3e": {
+            "type": "sr",
+            "connections": {
+                "a": "4bac358c-8c03-4d86-b655-bc25e595e1b3.b",
+                "b": null,
+                "c": null
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    53.59
+                ],
+                "b": [
+                    573.21,
+                    153.59
+                ],
+                "c": [
+                    600.0,
+                    107.18
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "radius": 400,
+                "angle": 30,
+                "dir": "r",
+                "coords": [
+                    400.0,
+                    -53.59,
+                    60
+                ]
+            }
+        }
+    }
+}

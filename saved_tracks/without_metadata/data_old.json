@@ -1,0 +1,741 @@
+{
+    "segments": {
+        "d226772b-439c-44f6-9f65-cd4085401f8c": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    0.0
+                ],
+                "b": [
+                    200.0,
+                    -0.0
+                ]
+            }
+        },
+        "d74d5e4f-952b-40de-a3e7-aaa31106cb9f": {
+            "type": "cl",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    0.0
+                ],
+                "b": [
+                    400.0,
+                    -53.59
+                ]
+            }
+        },
+        "a6d75f19-d99b-4d16-9edc-0f536be7ba4e": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    -53.59
+                ],
+                "b": [
+                    600.0,
+                    -107.18
+                ]
+            }
+        },
+        "a6f66c15-aca3-4baa-878f-a59bcc4a3aaa": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    600.0,
+                    -107.18
+                ],
+                "b": [
+                    800.0,
+                    -53.59
+                ]
+            }
+        },
+        "26447f7f-fa04-4596-ae48-96540e4f9e9f": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    800.0,
+                    -53.59
+                ],
+                "b": [
+                    946.41,
+                    92.82
+                ]
+            }
+        },
+        "eb11b628-3597-4b63-a2bd-6703ae15e87c": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    946.41,
+                    92.82
+                ],
+                "b": [
+                    1000.0,
+                    292.82
+                ]
+            }
+        },
+        "d2ff61d9-f71b-47c3-9c6f-17f83f1b942c": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    1000.0,
+                    292.82
+                ],
+                "b": [
+                    946.41,
+                    492.82
+                ]
+            }
+        },
+        "c1ef37b7-81dc-4ee6-b7e2-fcbb99c7b5b1": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    946.41,
+                    492.82
+                ],
+                "b": [
+                    800.0,
+                    639.23
+                ]
+            }
+        },
+        "6aabc345-4ea7-45a3-bb6b-da725cd4f145": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    800.0,
+                    639.23
+                ],
+                "b": [
+                    600.0,
+                    692.82
+                ]
+            }
+        },
+        "71707bcc-b894-4b97-88a9-ada6c26c9588": {
+            "type": "sr",
+            "connections": {
+                "a": "smth",
+                "b": "smth",
+                "c": "smth"
+            },
+            "location": {
+                "a": [
+                    600.0,
+                    692.82
+                ],
+                "b": [
+                    400.0,
+                    692.82
+                ],
+                "c": [
+                    400.0,
+                    639.23
+                ]
+            }
+        },
+        "d17df4cd-fff2-46a0-bf13-736d75482918": {
+            "type": "cl",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    639.23
+                ],
+                "b": [
+                    200.0,
+                    585.64
+                ]
+            }
+        },
+        "9b05805a-6ea7-402e-8b8f-57926c592dd6": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    585.64
+                ],
+                "b": [
+                    0.0,
+                    585.64
+                ]
+            }
+        },
+        "714e62a8-30c8-454a-9635-b8d1c9bfca24": {
+            "type": "cl",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    585.64
+                ],
+                "b": [
+                    -200.0,
+                    639.23
+                ]
+            }
+        },
+        "dba71f42-753e-4b34-b168-fa8135bf33e7": {
+            "type": "sl",
+            "connections": {
+                "a": "smth",
+                "b": "smth",
+                "c": "smth"
+            },
+            "location": {
+                "a": [
+                    -400.0,
+                    692.82
+                ],
+                "b": [
+                    -200.0,
+                    692.82
+                ],
+                "c": [
+                    -200.0,
+                    639.23
+                ]
+            }
+        },
+        "6c09291c-982e-4c33-bfe7-a9576f85d6a9": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    -200.0,
+                    692.82
+                ],
+                "b": [
+                    0.0,
+                    692.82
+                ]
+            }
+        },
+        "a3f0cdd0-ea43-437d-b04f-46f032bbf8f5": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    692.82
+                ],
+                "b": [
+                    200.0,
+                    692.82
+                ]
+            }
+        },
+        "410f9bc6-88e3-4757-a63a-d92519b2b59d": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    692.82
+                ],
+                "b": [
+                    0.0,
+                    692.82
+                ]
+            }
+        },
+        "74718d04-b7e9-4492-8606-002f98964ec3": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    -400.0,
+                    692.82
+                ],
+                "b": [
+                    -600.0,
+                    639.23
+                ]
+            }
+        },
+        "2cfe81ec-69a3-4ba6-a08e-1d3e03771046": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    -600.0,
+                    639.23
+                ],
+                "b": [
+                    -746.41,
+                    492.82
+                ]
+            }
+        },
+        "9e34e1fd-879f-4dc7-aeab-b98564713121": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    -746.41,
+                    492.82
+                ],
+                "b": [
+                    -800.0,
+                    292.82
+                ]
+            }
+        },
+        "b14f95cf-0aee-4b93-8445-684507ff5482": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    -800.0,
+                    292.82
+                ],
+                "b": [
+                    -746.41,
+                    92.82
+                ]
+            }
+        },
+        "b751fdd8-0d25-4a17-9c30-cf8ff78b933f": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    -746.41,
+                    92.82
+                ],
+                "b": [
+                    -600.0,
+                    -53.59
+                ]
+            }
+        },
+        "9875b039-6ad4-454f-a59e-f04ad7d6e008": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    -600.0,
+                    -53.59
+                ],
+                "b": [
+                    -400.0,
+                    -107.18
+                ]
+            }
+        },
+        "671a17c6-ec55-4503-9ba7-5a88c6dc7f81": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    -400.0,
+                    -107.18
+                ],
+                "b": [
+                    -200.0,
+                    -53.59
+                ]
+            }
+        },
+        "8ff143be-b379-445b-89d5-58f887e787d7": {
+            "type": "sl",
+            "connections": {
+                "a": "smth",
+                "b": "smth",
+                "c": "smth"
+            },
+            "location": {
+                "a": [
+                    -200.0,
+                    -53.59
+                ],
+                "b": [
+                    -26.79,
+                    46.41
+                ],
+                "c": [
+                    -0.0,
+                    -0.0
+                ]
+            }
+        },
+        "4b4ac30b-fcaa-4775-a511-8e68ebfdbffc": {
+            "type": "sl",
+            "connections": {
+                "a": "smth",
+                "b": "smth",
+                "c": "smth"
+            },
+            "location": {
+                "a": [
+                    -26.79,
+                    46.41
+                ],
+                "b": [
+                    146.42,
+                    146.41
+                ],
+                "c": [
+                    173.21,
+                    100.0
+                ]
+            }
+        },
+        "4dbef422-6b51-49fc-87bf-b6bfed5159ae": {
+            "type": "sl",
+            "connections": {
+                "a": "smth",
+                "b": "smth",
+                "c": "smth"
+            },
+            "location": {
+                "a": [
+                    146.42,
+                    146.41
+                ],
+                "b": [
+                    319.63,
+                    246.41
+                ],
+                "c": [
+                    346.42,
+                    200.0
+                ]
+            }
+        },
+        "1a3fae92-52f3-4c83-852e-9eef9f2595bc": {
+            "type": "sl",
+            "connections": {
+                "a": "smth",
+                "b": "smth",
+                "c": "smth"
+            },
+            "location": {
+                "a": [
+                    319.63,
+                    246.41
+                ],
+                "b": [
+                    492.84,
+                    346.41
+                ],
+                "c": [
+                    519.63,
+                    300.0
+                ]
+            }
+        },
+        "dee8366e-f27f-49aa-9752-dc4aaede4499": {
+            "type": "sl",
+            "connections": {
+                "a": "smth",
+                "b": "smth",
+                "c": "smth"
+            },
+            "location": {
+                "a": [
+                    492.84,
+                    346.41
+                ],
+                "b": [
+                    666.05,
+                    446.41
+                ],
+                "c": [
+                    692.84,
+                    400.0
+                ]
+            }
+        },
+        "06620d7c-4f1e-459b-a825-8901d2ce68bc": {
+            "type": "cl",
+            "connections": {
+                "a": "smth",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    666.05,
+                    446.41
+                ],
+                "b": [
+                    866.05,
+                    500.0
+                ]
+            }
+        },
+        "2dff2a15-c755-4413-8472-8b82bcd5f488": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    692.84,
+                    400.0
+                ],
+                "b": [
+                    892.84,
+                    400.0
+                ]
+            }
+        },
+        "9ebb5828-4bef-4a34-b7c7-77ebb6bce527": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    519.63,
+                    300.0
+                ],
+                "b": [
+                    719.63,
+                    300.0
+                ]
+            }
+        },
+        "b027cc26-bd8c-44d5-b386-4b1637bec839": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    719.63,
+                    300.0
+                ],
+                "b": [
+                    919.63,
+                    300.0
+                ]
+            }
+        },
+        "8f51e966-89b1-4b25-9ff8-905dbaf2c122": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    346.42,
+                    200.0
+                ],
+                "b": [
+                    546.42,
+                    200.0
+                ]
+            }
+        },
+        "c1b6a2bc-0d36-4162-95f3-00ead6c4af52": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    546.42,
+                    200.0
+                ],
+                "b": [
+                    746.42,
+                    200.0
+                ]
+            }
+        },
+        "8a252694-11e2-4ae0-94d4-581c1522bf0b": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    746.42,
+                    200.0
+                ],
+                "b": [
+                    946.42,
+                    200.0
+                ]
+            }
+        },
+        "05e77a86-dc4e-47c5-9f1d-786990f12cd4": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    173.21,
+                    100.0
+                ],
+                "b": [
+                    373.21,
+                    100.0
+                ]
+            }
+        },
+        "cedd765c-525a-447c-899f-d63301550422": {
+            "type": "sl",
+            "connections": {
+                "a": "smth",
+                "b": "smth",
+                "c": "smth"
+            },
+            "location": {
+                "a": [
+                    373.21,
+                    100.0
+                ],
+                "b": [
+                    573.21,
+                    100.0
+                ],
+                "c": [
+                    573.21,
+                    46.41
+                ]
+            }
+        },
+        "e103420e-4a0f-4c05-8a90-fead5854a57b": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": "smth"
+            },
+            "location": {
+                "a": [
+                    573.21,
+                    100.0
+                ],
+                "b": [
+                    773.21,
+                    100.0
+                ]
+            }
+        },
+        "591af36f-0a9f-47f5-a205-09822d2a2354": {
+            "type": "cr",
+            "connections": {
+                "a": "smth",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    573.21,
+                    46.41
+                ],
+                "b": [
+                    773.21,
+                    -7.18
+                ]
+            }
+        },
+        "b77b8eb0-63fb-4ec5-81ef-ef7091a123ab": {
+            "type": "st",
+            "connections": {
+                "a": "smth",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    773.21,
+                    100.0
+                ],
+                "b": [
+                    973.21,
+                    100.0
+                ]
+            }
+        }
+    }
+}

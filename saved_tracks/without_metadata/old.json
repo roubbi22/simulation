@@ -1,0 +1,55 @@
+{
+    "segments": {
+        "1a0eb3de-a1c6-495d-929f-7c2db4efa1b8": {
+            "type": "st",
+            "connections": {
+                "a": "be322e5d-5109-430c-9ea1-ca83b16fdf1f.a",
+                "b": "eb1f3244-b31f-4e54-b565-c964d1f673bd.a"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    0.0
+                ],
+                "b": [
+                    200.0,
+                    -0.0
+                ]
+            }
+        },
+        "eb1f3244-b31f-4e54-b565-c964d1f673bd": {
+            "type": "st",
+            "connections": {
+                "a": "1a0eb3de-a1c6-495d-929f-7c2db4efa1b8.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    0.0
+                ],
+                "b": [
+                    400.0,
+                    -0.0
+                ]
+            }
+        },
+        "be322e5d-5109-430c-9ea1-ca83b16fdf1f": {
+            "type": "st",
+            "connections": {
+                "a": "1a0eb3de-a1c6-495d-929f-7c2db4efa1b8.a",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    0.0
+                ],
+                "b": [
+                    -200.0,
+                    0.0
+                ]
+            }
+        }
+    }
+}

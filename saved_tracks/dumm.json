@@ -1,0 +1,732 @@
+{
+    "segments": {
+        "bfa586fe-7d54-4d62-917b-3754d5bca5ec": {
+            "type": "sl",
+            "connections": {
+                "a": "3ea57b08-ed5b-4f25-b68e-e2f17ba753e7.a",
+                "b": "ecb83d73-c682-481f-854b-7c5dcd862ee3.a",
+                "c": "d9059d91-2555-4130-a3f4-1d12f55b55ff.a"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    -0.0
+                ],
+                "b": [
+                    400.0,
+                    0.0
+                ],
+                "c": [
+                    400.0,
+                    53.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    200.0,
+                    -0.0,
+                    90
+                ]
+            }
+        },
+        "d9059d91-2555-4130-a3f4-1d12f55b55ff": {
+            "type": "sl",
+            "connections": {
+                "a": "bfa586fe-7d54-4d62-917b-3754d5bca5ec.c",
+                "b": "f52c02ca-561e-41fb-b615-431fd71eaafa.a",
+                "c": "f14a2e7b-dd39-4f78-9b82-3695f34efe6a.a"
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    53.59
+                ],
+                "b": [
+                    573.21,
+                    153.59
+                ],
+                "c": [
+                    546.41,
+                    200.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    400.0,
+                    -53.59,
+                    60
+                ]
+            }
+        },
+        "f14a2e7b-dd39-4f78-9b82-3695f34efe6a": {
+            "type": "sl",
+            "connections": {
+                "a": "d9059d91-2555-4130-a3f4-1d12f55b55ff.c",
+                "b": "13916d1e-7e90-4f50-b707-967349048197.a",
+                "c": "24b6a10e-dde4-4971-b684-ebde32631650.a"
+            },
+            "location": {
+                "a": [
+                    546.41,
+                    200.0
+                ],
+                "b": [
+                    646.41,
+                    373.21
+                ],
+                "c": [
+                    600.0,
+                    400.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    546.41,
+                    -200.0,
+                    30
+                ]
+            }
+        },
+        "24b6a10e-dde4-4971-b684-ebde32631650": {
+            "type": "sl",
+            "connections": {
+                "a": "f14a2e7b-dd39-4f78-9b82-3695f34efe6a.c",
+                "b": "35198233-ee26-4a9a-b8f9-dad5770fb8d5.a",
+                "c": "1129098f-f94e-4f37-bb55-2bafd7f7132c.a"
+            },
+            "location": {
+                "a": [
+                    600.0,
+                    400.0
+                ],
+                "b": [
+                    600.0,
+                    600.0
+                ],
+                "c": [
+                    546.41,
+                    600.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    600.0,
+                    -400.0,
+                    0
+                ]
+            }
+        },
+        "1129098f-f94e-4f37-bb55-2bafd7f7132c": {
+            "type": "sl",
+            "connections": {
+                "a": "24b6a10e-dde4-4971-b684-ebde32631650.c",
+                "b": "979b25a0-d39b-4b28-8e8b-7b86553e3a3b.a",
+                "c": "ef14350c-a87f-467e-8f94-62f078b82be3.a"
+            },
+            "location": {
+                "a": [
+                    546.41,
+                    600.0
+                ],
+                "b": [
+                    446.41,
+                    773.21
+                ],
+                "c": [
+                    400.0,
+                    746.41
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    546.41,
+                    -600.0,
+                    330
+                ]
+            }
+        },
+        "ecb83d73-c682-481f-854b-7c5dcd862ee3": {
+            "type": "cl",
+            "connections": {
+                "a": "bfa586fe-7d54-4d62-917b-3754d5bca5ec.b",
+                "b": "43f4d885-9341-4892-95b1-c6a782b24038.a"
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    -0.0
+                ],
+                "b": [
+                    600.0,
+                    53.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    400.0,
+                    -0.0,
+                    90
+                ]
+            }
+        },
+        "f52c02ca-561e-41fb-b615-431fd71eaafa": {
+            "type": "cl",
+            "connections": {
+                "a": "d9059d91-2555-4130-a3f4-1d12f55b55ff.b",
+                "b": "595306d7-4fd9-411d-a92c-90baffc13775.a"
+            },
+            "location": {
+                "a": [
+                    573.21,
+                    153.59
+                ],
+                "b": [
+                    719.62,
+                    300.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    573.21,
+                    -153.59,
+                    60
+                ]
+            }
+        },
+        "13916d1e-7e90-4f50-b707-967349048197": {
+            "type": "cl",
+            "connections": {
+                "a": "f14a2e7b-dd39-4f78-9b82-3695f34efe6a.b",
+                "b": "db1f8276-6581-46fc-a9f8-f287fb2bcfc9.a"
+            },
+            "location": {
+                "a": [
+                    646.41,
+                    373.21
+                ],
+                "b": [
+                    700.0,
+                    573.21
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    646.41,
+                    -373.21,
+                    30
+                ]
+            }
+        },
+        "35198233-ee26-4a9a-b8f9-dad5770fb8d5": {
+            "type": "cl",
+            "connections": {
+                "a": "24b6a10e-dde4-4971-b684-ebde32631650.b",
+                "b": "147f1c2d-0f76-40de-807f-916123948d50.a"
+            },
+            "location": {
+                "a": [
+                    600.0,
+                    600.0
+                ],
+                "b": [
+                    546.41,
+                    800.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    600.0,
+                    -600.0,
+                    0
+                ]
+            }
+        },
+        "979b25a0-d39b-4b28-8e8b-7b86553e3a3b": {
+            "type": "cl",
+            "connections": {
+                "a": "1129098f-f94e-4f37-bb55-2bafd7f7132c.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    446.41,
+                    773.21
+                ],
+                "b": [
+                    300.0,
+                    919.62
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    446.41,
+                    -773.21,
+                    330
+                ]
+            }
+        },
+        "43f4d885-9341-4892-95b1-c6a782b24038": {
+            "type": "st",
+            "connections": {
+                "a": "ecb83d73-c682-481f-854b-7c5dcd862ee3.b",
+                "b": "d20fb5cd-fcf6-4fb0-80d1-b1535d8f5e98.a"
+            },
+            "location": {
+                "a": [
+                    600.0,
+                    53.59
+                ],
+                "b": [
+                    773.21,
+                    153.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    600.0,
+                    -53.59,
+                    60
+                ]
+            }
+        },
+        "d20fb5cd-fcf6-4fb0-80d1-b1535d8f5e98": {
+            "type": "cl",
+            "connections": {
+                "a": "43f4d885-9341-4892-95b1-c6a782b24038.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    773.21,
+                    153.59
+                ],
+                "b": [
+                    919.62,
+                    300.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    773.21,
+                    -153.59,
+                    60
+                ]
+            }
+        },
+        "595306d7-4fd9-411d-a92c-90baffc13775": {
+            "type": "st",
+            "connections": {
+                "a": "f52c02ca-561e-41fb-b615-431fd71eaafa.b",
+                "b": "3e6e9c5a-16bd-4c0f-86d0-ecc7cb36b541.a"
+            },
+            "location": {
+                "a": [
+                    719.62,
+                    300.0
+                ],
+                "b": [
+                    819.62,
+                    473.21
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    719.62,
+                    -300.0,
+                    30
+                ]
+            }
+        },
+        "3e6e9c5a-16bd-4c0f-86d0-ecc7cb36b541": {
+            "type": "cl",
+            "connections": {
+                "a": "595306d7-4fd9-411d-a92c-90baffc13775.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    819.62,
+                    473.21
+                ],
+                "b": [
+                    873.21,
+                    673.21
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    819.62,
+                    -473.21,
+                    30
+                ]
+            }
+        },
+        "db1f8276-6581-46fc-a9f8-f287fb2bcfc9": {
+            "type": "st",
+            "connections": {
+                "a": "13916d1e-7e90-4f50-b707-967349048197.b",
+                "b": "f9012532-60ff-437a-bfff-0a6ff7cc1513.a"
+            },
+            "location": {
+                "a": [
+                    700.0,
+                    573.21
+                ],
+                "b": [
+                    700.0,
+                    773.21
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    700.0,
+                    -573.21,
+                    0
+                ]
+            }
+        },
+        "147f1c2d-0f76-40de-807f-916123948d50": {
+            "type": "st",
+            "connections": {
+                "a": "35198233-ee26-4a9a-b8f9-dad5770fb8d5.b",
+                "b": "86aeaf2c-2cf8-4b8f-af71-89deb6824cdb.a"
+            },
+            "location": {
+                "a": [
+                    546.41,
+                    800.0
+                ],
+                "b": [
+                    446.41,
+                    973.21
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    546.41,
+                    -800.0,
+                    330
+                ]
+            }
+        },
+        "86aeaf2c-2cf8-4b8f-af71-89deb6824cdb": {
+            "type": "cl",
+            "connections": {
+                "a": "147f1c2d-0f76-40de-807f-916123948d50.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    446.41,
+                    973.21
+                ],
+                "b": [
+                    300.0,
+                    1119.62
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    446.41,
+                    -973.21,
+                    330
+                ]
+            }
+        },
+        "f9012532-60ff-437a-bfff-0a6ff7cc1513": {
+            "type": "cl",
+            "connections": {
+                "a": "db1f8276-6581-46fc-a9f8-f287fb2bcfc9.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    700.0,
+                    773.21
+                ],
+                "b": [
+                    646.41,
+                    973.21
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    700.0,
+                    -773.21,
+                    0
+                ]
+            }
+        },
+        "ef14350c-a87f-467e-8f94-62f078b82be3": {
+            "type": "cl",
+            "connections": {
+                "a": "1129098f-f94e-4f37-bb55-2bafd7f7132c.c",
+                "b": "e6ca8643-fd48-45e8-b506-55ff2f46b059.a"
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    746.41
+                ],
+                "b": [
+                    200.0,
+                    800.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    400.0,
+                    -746.41,
+                    300
+                ]
+            }
+        },
+        "e6ca8643-fd48-45e8-b506-55ff2f46b059": {
+            "type": "cl",
+            "connections": {
+                "a": "ef14350c-a87f-467e-8f94-62f078b82be3.b",
+                "b": "8362bbbd-ee20-4674-bd91-c2eb431ac7dc.a"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    800.0
+                ],
+                "b": [
+                    0.0,
+                    746.41
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    200.0,
+                    -800.0,
+                    270
+                ]
+            }
+        },
+        "8362bbbd-ee20-4674-bd91-c2eb431ac7dc": {
+            "type": "cl",
+            "connections": {
+                "a": "e6ca8643-fd48-45e8-b506-55ff2f46b059.b",
+                "b": "34c4de0e-9937-44d9-89e3-b14e9faf86f9.a"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    746.41
+                ],
+                "b": [
+                    -146.41,
+                    600.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    0.0,
+                    -746.41,
+                    240
+                ]
+            }
+        },
+        "34c4de0e-9937-44d9-89e3-b14e9faf86f9": {
+            "type": "cl",
+            "connections": {
+                "a": "8362bbbd-ee20-4674-bd91-c2eb431ac7dc.b",
+                "b": "72e38f4a-f180-4d0a-90e7-214aa7b4aaab.a"
+            },
+            "location": {
+                "a": [
+                    -146.41,
+                    600.0
+                ],
+                "b": [
+                    -200.0,
+                    400.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    -146.41,
+                    -600.0,
+                    210
+                ]
+            }
+        },
+        "72e38f4a-f180-4d0a-90e7-214aa7b4aaab": {
+            "type": "cl",
+            "connections": {
+                "a": "34c4de0e-9937-44d9-89e3-b14e9faf86f9.b",
+                "b": "a7db88bd-7b74-4ba1-bc94-f7d79c0b37a7.a"
+            },
+            "location": {
+                "a": [
+                    -200.0,
+                    400.0
+                ],
+                "b": [
+                    -146.41,
+                    200.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    -200.0,
+                    -400.0,
+                    180
+                ]
+            }
+        },
+        "a7db88bd-7b74-4ba1-bc94-f7d79c0b37a7": {
+            "type": "cl",
+            "connections": {
+                "a": "72e38f4a-f180-4d0a-90e7-214aa7b4aaab.b",
+                "b": "3ea57b08-ed5b-4f25-b68e-e2f17ba753e7.c"
+            },
+            "location": {
+                "a": [
+                    -146.41,
+                    200.0
+                ],
+                "b": [
+                    0.0,
+                    53.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    -146.41,
+                    -200.0,
+                    150
+                ]
+            }
+        },
+        "3ea57b08-ed5b-4f25-b68e-e2f17ba753e7": {
+            "type": "sr",
+            "connections": {
+                "a": "bfa586fe-7d54-4d62-917b-3754d5bca5ec.a",
+                "b": null,
+                "c": "a7db88bd-7b74-4ba1-bc94-f7d79c0b37a7.b"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    0.0
+                ],
+                "b": [
+                    -0.0,
+                    -0.0
+                ],
+                "c": [
+                    0.0,
+                    53.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "c",
+                "length": 200,
+                "radius": 400,
+                "angle": 30,
+                "dir": "r",
+                "coords": [
+                    0.0,
+                    -53.59,
+                    120
+                ]
+            }
+        }
+    }
+}

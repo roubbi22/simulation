@@ -1,0 +1,160 @@
+{
+    "segments": {
+        "1": {
+            "type": "st",
+            "connections": {
+                "a": null,
+                "b": "2.a"
+            },
+            "location": {
+                "a": [0, 0],
+                "b": [0, 0.30]
+            }
+        },
+        "2": {
+            "type": "st",
+            "connections": {
+                "a": "1.b",
+                "b": "3.a"
+            }
+        },
+        "3": {
+            "type": "st",
+            "connections": {
+                "a": "2.b",
+                "b": "4.b"
+            }
+        },
+        "4": {
+            "type": "sl",
+            "connections": {
+                "a": "5.a",
+                "b": "3.b",
+                "c": "8.b"
+            }
+        },
+        "5": {
+            "type": "st",
+            "connections": {
+                "a": "4.a",
+                "b": "6.a"
+            }
+        },
+        "6": {
+            "type": "st",
+            "connections": {
+                "a": "5.b",
+                "b": "7.a"
+            }
+        },
+        "7": {
+            "type": "st",
+            "connections": {
+                "a": "6.b",
+                "b": null
+            }
+        },
+        "8": {
+            "type": "sr",
+            "connections": {
+                "a": "13.c",
+                "b": "4.c",
+                "c": "9.a"
+            }
+        },
+        "9": {
+            "type": "st",
+            "connections": {
+                "a": "8.c",
+                "b": "10.a"
+            }
+        },
+        "10": {
+            "type": "cr",
+            "connections": {
+                "a": "9.b",
+                "b": "17.c"
+            }
+        },
+        "11": {
+            "type": "st",
+            "connections": {
+                "a": null,
+                "b": "12.a"
+            }
+        },
+        "12": {
+            "type": "st",
+            "connections": {
+                "a": "11.b",
+                "b": "13.a"
+            }
+        },
+        "13": {
+            "type": "sl",
+            "connections": {
+                "a": "12.b",
+                "b": "14.b",
+                "c": "8.a"
+            }
+        },
+        "14": {
+            "type": "sl",
+            "connections": {
+                "a": "15.a",
+                "b": "13.b",
+                "c": "21.b"
+            }
+        },
+        "15": {
+            "type": "st",
+            "connections": {
+                "a": "14.a",
+                "b": "16.a"
+            }
+        },
+        "16": {
+            "type": "st",
+            "connections": {
+                "a": "15.b",
+                "b": "17.b"
+            }
+        },
+        "17": {
+            "type": "sr",
+            "connections": {
+                "a": "18.a",
+                "b": "16.b",
+                "c": "10.b"
+            }
+        },
+        "18": {
+            "type": "st",
+            "connections": {
+                "a": "17.a",
+                "b": "19.a"
+            }
+        },
+        "19": {
+            "type": "st",
+            "connections": {
+                "a": "18.b",
+                "b": null
+            }
+        },
+        "20": {
+            "type": "st",
+            "connections": {
+                "a": null,
+                "b": "21.a"
+            }
+        },
+        "21": {
+            "type": "sl",
+            "connections": {
+                "a": "20.b",
+                "b": "14.c"
+            }
+        }
+    }
+}
