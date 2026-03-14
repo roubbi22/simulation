@@ -1,5 +1,3 @@
-from models.segments import SegmentEnd
-
 from dataclasses import dataclass
 from typing import Union, Literal
 
@@ -18,6 +16,19 @@ class EndVector:
         elif isinstance(other, EndVector):
             return EndVector(self.x + other.x, self.y + other.y, self.angle + other.angle)
         return NotImplemented
+    
+    def __sub__(self, other: EndVector):
+        if isinstance(other, tuple) and len(other) == 3:
+            return EndVector(self.x - other[0], self.y - other[1], self.angle - other[2])
+        elif isinstance(other, EndVector):
+            return EndVector(self.x - other.x, self.y - other.y, self.angle - other.angle)
+        return NotImplemented
+    
+    def __mul__(self, scalar):
+        return EndVector(self.x * scalar, self.y * scalar, self.angle)
+    
+    def __truediv__(self, scalar: float):
+        return EndVector(self.x / scalar, self.y / scalar, self.angle)
     
     def rotate(self, rotation_center: Union[tuple, EndVector], angle, unit: Literal["rad", "deg"] = "deg"):
         # define rotation matrix
@@ -49,7 +60,7 @@ class EndVector:
         self.angle = (self.angle + (angle if unit == "deg" else np.degrees(angle))) % 360
         
 
-    def calc_dist_to_other(self, other: SegmentEnd) -> list[float]:
+    def calc_dist_to_other(self, other: EndVector) -> list[float]:
         return [
             math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2),
             (self.angle - other.angle) % 360

@@ -1,14 +1,18 @@
 from PyQt6.QtWidgets import QGraphicsScene
 from models.segments import BaseSegment, SegmentStraight , SegmentCurve, SegmentSwitch, SegmentEnd
-from custom_types import SegmentType
+from vehicle import Vehicle
+from custom_types.SegmentTypes import SegmentType
 from typing import Dict
 import uuid
 import json
+
+import networkx as nx
 
 class Track:
     def __init__(self, scene: QGraphicsScene):
         self.scene = scene
         self.segments: Dict[str, BaseSegment] = {}
+        self.vehicles: Dict[str, Vehicle] = {}
         self.altered_since_save = True
         self.file_path = None
         
@@ -74,6 +78,10 @@ class Track:
         self.scene.removeItem(segment.graphical_representation)
         self.altered_since_save = True
 
+    def add_vehicle(self, vehicle: Vehicle):
+        vehicle_id = uuid.uuid4()
+        self.vehicles[vehicle_id] = vehicle
+
     def _get_open_ends(self) -> list[SegmentEnd]:
         open_ends = []
         for segment in self.segments.values():
@@ -82,16 +90,16 @@ class Track:
                     open_ends.append(end)
 
         return open_ends
-
-    def store(self, file_path):
+    
+    def _get_segments_dict(self, include_meta: bool = True) -> Dict:
         """
-        store the track to .json file
+        returns an dict containing all segments
         """
-        ouput= {}
+        output= {}
 
         for key, segment in self.segments.items():
 
-            ouput[key] = {}
+            output[key] = {}
 
             if isinstance(segment, SegmentStraight):
                 segment_type = "st"
@@ -116,13 +124,22 @@ class Track:
                     connections[end_key] = f"{other_parent_key}.{other_end_key}"
                 location[end_key] = [end.vector.x, -end.vector.y]
 
-            ouput[key]["type"] = segment_type
-            ouput[key]["connections"] = connections
-            ouput[key]["location"] = location
-            ouput[key]["metadata"] = segment.metadata
+            output[key]["type"] = segment_type
+            output[key]["connections"] = connections
+            output[key]["location"] = location
+            if include_meta:
+                output[key]["metadata"] = segment.metadata
+        
+        return output
+
+    def store(self, file_path):
+        """
+        store the track to .json file
+        """
+        output = self._get_segments_dict(True)
 
         with open(file_path, "w") as file:
-            json.dump({"segments": ouput}, file, indent=4)
+            json.dump({"segments": output}, file, indent=4)
 
         self.altered_since_save = False
 
@@ -174,3 +191,48 @@ class Track:
             )
 
         self.altered_since_save = False
+
+    def find_best_route(self, starting_node=None, end_node=None, strategy=None):
+        """
+        retruns the best route from one node to another
+        requires starting node, end node and Strategy
+        """
+        segments =self._get_segments_dict(False)
+
+        G = nx.Graph()
+        nodes = {}
+        edges = []
+        pos = {}
+
+        for segment_id, segment in segments.items():
+            segment_type = segment["type"]
+            ports: Dict = segment["connections"]
+
+            for port, value in ports.items():
+                own: str = f"{segment_id}.{port}"
+                other: str = value
+
+                if not value:
+                    node_id = f"{own}_end"
+                elif(
+                    own.split(".")[0] < other.split(".")[0]
+                ):
+                    node_id = f"{own}_{other}"
+                else: node_id = f"{other}_{own}"
+
+                if node_id not in nodes:
+                    nodes[node_id] = node_id
+                    pos[node_id] = segment["location"][port]
+                
+                ports[port] = node_id
+            
+            if segment_type in ("st", "cl", "cr", "sl", "sr"):
+                edges.append((ports["a"], ports["b"]))
+            else:
+                print("segment not found")
+            if segment_type in ("sl", "sr"):
+                if "c" in ports and ports["c"] is not None:
+                    edges.append((ports["a"], ports["c"]))
+
+
+        pass

@@ -1,3 +1,4 @@
+from custom_types.EndVector import EndVector
 from models.segments import BaseSegment
 from view import ItemSegmentCurve
 from typing import Literal, TYPE_CHECKING
@@ -27,7 +28,7 @@ class SegmentCurve(BaseSegment):
                 ),
                 self)
         }
-        self.radius = radius,
+        self.radius = radius
         self.angle = angle
         self.dir = dir
 
@@ -50,6 +51,27 @@ class SegmentCurve(BaseSegment):
 
     def connect(segment_end_id: str):
         pass
+
+    def get_coordinates_on_segment(self, from_end: str, to_end: str, percentage: float) -> EndVector:
+        # get the coordinates of the center point
+        angle_to_center = self.ends["a"].vector.angle + (90 if self.dir == "l" else -90)
+        rot_center = EndVector(
+            self.ends["a"].vector.x + (math.sin(np.radians(angle_to_center)) * self.radius),
+            self.ends["a"].vector.y - (math.cos(np.radians(angle_to_center)) * self.radius),
+            0
+        )
+        coords = EndVector(
+            self.ends[from_end].vector.x,
+            self.ends[from_end].vector.y,
+            (self.ends[from_end].vector.angle + 180) % 360,
+        )
+        # rotate the from_end point by the segment angle times percentage depending on from_end and dir
+        if (self.dir == "l" and from_end == "a") or (self.dir == "r" and from_end == "b"):
+            coords.rotate(rot_center, -self.angle * percentage)
+        else: 
+            coords.rotate(rot_center, self.angle * percentage)
+        return coords
+        
 
     def update_view(self):
         return super().update_view()

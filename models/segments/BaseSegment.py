@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from custom_types.EndVector import EndVector
 from view import GraphicBaseSegment
 from typing import TYPE_CHECKING
 
@@ -35,6 +36,10 @@ class BaseSegment(ABC):
         
     @abstractmethod
     def connect(self, segment_end_id: str):
+        pass
+
+    @abstractmethod
+    def get_coordinates_on_segment(self, from_end: str, to_end: str, percentage: float) -> EndVector:
         pass
 
     def _reposition_for_end(self):

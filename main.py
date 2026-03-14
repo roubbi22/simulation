@@ -13,7 +13,6 @@ class MainWindow(QMainWindow):
         self.scene = QGraphicsScene()
         self.scene.setBackgroundBrush(QColor("#E4E4E4"))
         self.track = Track(self.scene)
-        self.track.add_segment(coords=[0, 0, 90], segment_type="Gerade", new_segment_starting_end="a")
 
         origin_point = self.track.scene.addEllipse(-2, -2, 4, 4)
         origin_point.setBrush(QColor("#FF0000"))
@@ -37,6 +36,8 @@ class MainWindow(QMainWindow):
         file_open = QAction("Datei öffnen...", self)
         file_open.triggered.connect(self.open_file)
         file_menu.addAction(file_open)
+
+        route_menu = menubar.addMenu("Simulation")
 
         self.setMenuBar(menubar)
 

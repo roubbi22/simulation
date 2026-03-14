@@ -1,24 +1,23 @@
-from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsPathItem, QGraphicsScene, QInputDialog, QInputDialog
+from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsPathItem, QGraphicsScene, QGraphicsView, QInputDialog, QInputDialog, QMenu
 from PyQt6.QtGui import QColor, QPainterPath, QPen
 from PyQt6.QtCore import QRectF, Qt
 from abc import abstractmethod
 import numpy as np
 import math
 
-# from model import SegmentStraight
+from custom_types import EndVector
+from models.segments import BaseSegment, SegmentEnd
 
 class ItemSegmentEnd(QGraphicsEllipseItem):
     def __init__(self, coords: list, parent_segment: GraphicBaseSegment, parent_segment_end, end_letter=None):
         super().__init__(QRectF(-6, -6, 12, 12), parent_segment)
-        # print(f"[DEBUG] ItemSegmentEnd erzeugt für End: {parent_segment_end}")
-        # print(f"end letter: {end_letter} at coords {coords}")
         self.coords = coords
-        self.parent_segment = parent_segment
-        self.parent_segment_end = parent_segment_end
+        self.parent_segment: GraphicBaseSegment = parent_segment
+        self.parent_segment_end: SegmentEnd = parent_segment_end
 
         match end_letter:
             case "a":
-                self.setBrush(QColor("#ffd000"))
+                self.setBrush(QColor("#dab200"))
             case "b":
                 self.setBrush(QColor("#0044ff"))
             case "c":
@@ -85,18 +84,20 @@ class ItemSegmentEnd(QGraphicsEllipseItem):
 
 
 class GraphicBaseSegment(QGraphicsPathItem):
-    def __init__(self, model_segment=None, scene=None):
+    def __init__(self, scene, model_segment=None,):
         super().__init__()
-        self.model = model_segment
+        self.model: BaseSegment = model_segment
         self.scene: QGraphicsScene = scene
+        self.display_color: QColor = QColor("#333333")
+        self.original_color: QColor = QColor("#333333")
         if self.model:
             self.update_from_model()
         if self.scene:
             self.scene.addItem(self)
+        self.setAcceptHoverEvents(True)
 
     @abstractmethod
     def update_from_model(self):
-        # print("updating item...")
         for key, end in self.model.ends.items():
             if end.connected_to is None and not end.graphic_representation:
                 end.graphic_representation = ItemSegmentEnd(
@@ -106,28 +107,46 @@ class GraphicBaseSegment(QGraphicsPathItem):
                     key
                 )
             elif end.graphic_representation and end.connected_to is not None:
-                # print(f"removing item at end {end}")
-                # print(f"removing segment end at {end.graphic_representation.pos()}")
-                self.scene.removeItem(end.graphic_representation)
+                if end.graphic_representation and end.graphic_representation.scene() == self.scene:
+                    self.scene.removeItem(end.graphic_representation)
         pass
 
     @abstractmethod
     def removeSegment(self):
         self.model.track.remove_segment(self.model)
 
+    def hoverEnterEvent(self, event):
+        self.display_color = QColor("#3700FF")
+        self.update_from_model()
+        return super().hoverEnterEvent(event)
+
+    def hoverLeaveEvent(self, event):
+        self.display_color = self.original_color
+        self.update_from_model()
+        return super().hoverLeaveEvent(event)
+
+    @abstractmethod
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.RightButton:
-            self.removeSegment()
+            menu = QMenu()
+            menu.addAction("Segment entfernen", lambda: self.removeSegment())
+            menu.addAction("Startpunkt setzen", lambda x: x)
+            menu.addAction("Fahrzeug positionieren", lambda :self._add_vehicle())
+            menu.exec(event.screenPos())
         return super().mousePressEvent(event)
+    
+    def _add_vehicle(self):
+        from vehicle import Vehicle
+        vehicle = Vehicle(scene=self.scene, segment=self.model, from_end="a", to_end="b", percentage=0.5)
+        self.model.track.add_vehicle(vehicle)
 
 
 class ItemSegmentStraight(GraphicBaseSegment):
     def __init__(self, model_segment, scene):
-        super().__init__(model_segment, scene)
+        super().__init__(scene, model_segment)
 
     def update_from_model(self):
         super().update_from_model()
-        # print("updating segment item")
         vector_a = self.model.ends["a"].vector
         vector_b = self.model.ends["b"].vector
 
@@ -136,22 +155,11 @@ class ItemSegmentStraight(GraphicBaseSegment):
         path.lineTo(vector_b.x, vector_b.y)
         self.setPath(path)
 
-        self.setPen(QPen(QColor("#333333"), 4))
-
-        # for end in self.model.ends.values():
-        #     if not end.connected_to:
-        #         end.graphic_representation = ItemSegmentEnd(
-        #             [end.vector.x, end.vector.y, end.vector.angle],
-        #             self,
-        #             end
-        #         )
-        #     elif end.graphic_representation:
-        #         self.scene.removeItem(end.graphic_representation)
-                
+        self.setPen(QPen(self.display_color, 4))             
 
 class ItemSegmentCurve(GraphicBaseSegment):
     def __init__(self, model_segment, scene):
-        super().__init__(model_segment, scene)
+        super().__init__(scene, model_segment)
 
     def update_from_model(self):
         super().update_from_model()
@@ -180,12 +188,11 @@ class ItemSegmentCurve(GraphicBaseSegment):
         path.arcTo(rect, start_angle, span_angle)
 
         self.setPath(path)
-        self.setPen(QPen(QColor("#333333"), 4))
-
+        self.setPen(QPen(self.display_color, 4))
 
 class ItemSegmentSwitch(GraphicBaseSegment):
     def __init__(self, model_segment, scene):
-        super().__init__(model_segment, scene)
+        super().__init__(scene, model_segment)
 
     def update_from_model(self):
         super().update_from_model()
@@ -203,92 +210,93 @@ class ItemSegmentSwitch(GraphicBaseSegment):
             -math.cos(radial_angle_a) * radius + vector_a.y 
         )
 
-        # radius = radius - 10
+        straight_offset = 75 if self.model.switch_setting == "c" else 0
+        curve_offset = 10 if self.model.switch_setting == "b" else 0
+        if self.model.dir == "r": curve_offset = - curve_offset
+
         path = QPainterPath()
-        path.moveTo(vector_a.x, vector_a.y)
+        path.moveTo(
+            vector_a.x + (-math.sin(np.radians(vector_a.angle)) * straight_offset),
+            vector_a.y + (math.cos(np.radians(vector_a.angle)) * straight_offset)
+        )
         path.lineTo(vector_b.x, vector_b.y)
         self.setPath(path)
 
-        self.setPen(QPen(QColor("#333333"), 4))
+        self.setPen(QPen(self.display_color, 4))
 
         rect = QRectF(center_x - radius, center_y - radius, 2 * radius, 2 * radius)
         
-        start_angle = 180-vector_a.angle if self.model.dir == "l" else -vector_a.angle - angle
+        start_angle = 180-vector_a.angle if self.model.dir == "l" else -vector_a.angle
         span_angle = angle if isinstance(angle, (int, float)) else float(angle)
 
-        start_x, start_y = (vector_a.x, vector_a.y) if self.model.dir == "l" else (vector_c.x, vector_c.y)
-        path.moveTo(start_x, start_y)
-        path.arcTo(rect, start_angle, span_angle)
+        start_x, start_y = (vector_a.x, vector_a.y)
 
+        start_coords = EndVector(
+            start_x, start_y, 270
+        )
+
+        rotation_center = (
+            start_x + (math.cos(np.radians(vector_a.angle)) * self.model.radius) if self.model.dir == "l" else start_x + (-math.cos(np.radians(vector_a.angle)) * self.model.radius),
+            start_y + (math.sin(np.radians(vector_a.angle)) * self.model.radius) if self.model.dir == "l" else start_y + (-math.sin(np.radians(vector_a.angle)) * self.model.radius),
+        )
+
+        print(vector_a, rotation_center)
+
+        start_coords.rotate(rotation_center, - curve_offset)#
+
+        # print(start_coords)
+
+        directed_span_angle = span_angle if self.model.dir == "l" else -span_angle
+
+        path.moveTo(start_coords.x, start_coords.y)
+        path.arcTo(rect, start_angle + curve_offset, directed_span_angle - curve_offset)
+        # path.arcTo(rect, start_angle, directed_span_angle)
         self.setPath(path)
-        self.setPen(QPen(QColor("#333333"), 4))
+        self.setPen(QPen(self.display_color, 4))
 
-        
-        # radius = radius + 20
-        
-        # rect = QRectF(center_x - radius, center_y - radius, 2 * radius, 2 * radius)
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.RightButton:
+            menu = QMenu()
+            menu.addAction("Segment entfernen", lambda: self.removeSegment())
+            menu.addAction("Startpunkt setzen", lambda x: x)
+            menu.addAction("Fahrzeug positionieren", lambda :self._add_vehicle())
+            menu.addAction("Weiche umstellen", self.toggle_switch)
+            menu.exec(event.screenPos())
+        return super().mousePressEvent(event)
+
+    def toggle_switch(self):
+        self.model.toggle_switch_setting()
+
+class ItemVehicle(QGraphicsPathItem):
+    def __init__(self, scene, model_vehicle,):
+        from vehicle import Vehicle
+        super().__init__()
+        self.model_vehicle: Vehicle = model_vehicle
+        self.scene: QGraphicsScene = scene
+        self.display_color: QColor = QColor("#333333")
+        self.original_color: QColor = QColor("#333333")
+        if self.model_vehicle:
+            self.update_from_model()
+        if self.scene:
+            self.scene.addItem(self)
+        self.setAcceptHoverEvents(True)
 
 
-        # start_x, start_y = (vector_a.x, vector_a.y)
-        # path.moveTo(start_x, start_y)
-        # path.arcTo(rect, start_angle, span_angle)
-
-        # self.setPath(path)
-        # self.setPen(QPen(QColor("#333333"), 4))
-
-
-        # for end in self.model.ends.values():
-        #     if not end.connected_to:
-        #         end.graphic_representation = ItemSegmentEnd(
-        #             [end.vector.x, end.vector.y, end.vector.angle],
-        #             self,
-        #             end
-        #         )
-        #     elif end.graphic_representation:
-        #         self.scene.removeItem(end.graphic_representation)
-
-# class ItemSegmentStraight(GraphicItem):
-#     def __init__(
-#             self,
-#             model_segment,
-#             scene: QGraphicsScene
-#             ):
-#         super().__init__()
-#         # self.model = model_segment
-#         # self.scene: QGraphicsScene = scene
-
-#         vector_a = self.model.ends["a"].vector
-#         vector_b = self.model.ends["b"].vector
-
-#         # print("drawing segment:", self.model.ends["a"].vector)
-
-#         path = QPainterPath()
-#         path.moveTo(vector_a.x, vector_a.y)
-#         path.lineTo(vector_b.x, vector_b.y)
-#         self.setPath(path)
-
-#         self.setPen(QPen(QColor("#333333"), 4))
-
-#         # self.setPos(vector_a.x, vector_a.y)
-
-#         for end in self.model.ends.values():
-#             if not end.connected_to:
-#                 # print(end.vector.x)
-#                 end.graphic_representation = ItemSegmentEnd(
-#                     [end.vector.x, end.vector.y, end.vector.angle],
-#                     self
-#                 )
-
-#         if self.scene:
-#             self.scene.addItem(self)
-
-#     def update_from_model(self):
-#         super().update_from_model()
-#         vector_a = self.model.ends["a"].vector
-#         vector_b = self.model.ends["b"].vector
-
-#         path = QPainterPath()
-#         path.moveTo(vector_a.x, vector_a.y)
-#         path.lineTo(vector_b.x, vector_b.y)
-
-#         self.setPath(path)
+    def update_from_model(self):
+        path = QPainterPath()
+        rect = QRectF(-10, -25, 20, 50)
+        path.addRect(rect)
+        path_dir = QPainterPath()
+        self.direction_line = QGraphicsPathItem(self)
+        self.setPath(path)
+        self.setPen(QPen(QColor("#123456"), 4))
+        self.setBrush(QColor("#fdfeff"))
+        self.setZValue(12) 
+        dir_path = QPainterPath()
+        dir_path.moveTo(0, -15)
+        dir_path.lineTo(0, -30)
+        self.direction_line.setPath(dir_path)
+        self.direction_line.setPen(QPen(QColor("#0000ff"), 2))
+        self.direction_line.setZValue(12)
+        self.setPos(self.model_vehicle.coords.x, self.model_vehicle.coords.y)
+        self.setRotation(self.model_vehicle.coords.angle)
