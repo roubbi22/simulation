@@ -31,6 +31,7 @@ class SegmentCurve(BaseSegment):
         self.radius = radius
         self.angle = angle
         self.dir = dir
+        self.length = math.pi * radius * (angle / 180)
 
         self.translate(coords[0], coords[1])
         self.rotate(coords[2] + 180, "a")
@@ -71,7 +72,23 @@ class SegmentCurve(BaseSegment):
         else: 
             coords.rotate(rot_center, self.angle * percentage)
         return coords
-        
+    
+    def move_by_distance(self, from_end: str, previous_percentage: float, distance = 0):
+        from_end_key = from_end
+        if isinstance(from_end, SegmentEnd): 
+            for k, v in self.ends.items():
+                print(k, v, v.connected_to)
+                if v is from_end:
+                    from_end_key = k
+
+        remaining_segment_distance = self.length * (1 - previous_percentage)
+        to_end_key = "b" if from_end_key == "a" else "a"
+        to_end = self.ends[to_end_key]
+        if distance > remaining_segment_distance:
+            return to_end.connected_to.parent_segment.move_by_distance(to_end.connected_to, 0, distance - remaining_segment_distance)
+        new_percentage = previous_percentage + (distance / self.length)
+        return (self, from_end_key, to_end_key, new_percentage)
+    pass
 
     def update_view(self):
         return super().update_view()

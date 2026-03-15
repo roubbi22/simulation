@@ -39,7 +39,11 @@ class BaseSegment(ABC):
         pass
 
     @abstractmethod
-    def get_coordinates_on_segment(self, from_end: str, to_end: str, percentage: float) -> EndVector:
+    def get_coordinates_on_segment(self, from_end: str, percentage: float) -> EndVector:
+        pass
+
+    @abstractmethod
+    def move_by_distance(from_end: str, previous_percentage: float, distance: float = 0,) -> tuple:
         pass
 
     def _reposition_for_end(self):

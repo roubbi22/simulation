@@ -1,11 +1,13 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QMainWindow, QMenuBar, QFileDialog, QDialog
 from PyQt6.QtGui import QColor, QPainter, QAction
+from PyQt6.QtCore import QTimer
 from models.Track import Track
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.timer = QTimer(self)
         self.setWindowTitle("RailTrackViz")
         self.showMaximized()
 
@@ -41,6 +43,9 @@ class MainWindow(QMainWindow):
 
         self.setMenuBar(menubar)
 
+        self.timer.timeout.connect(lambda: self.track.simulate(1/30))
+        self.timer.start(int(1000/30))
+
     def open_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Datei auswählen", "", "JSON Dateien (*.json);;Alle Dateien (*)")
         if file_path:
@@ -64,7 +69,6 @@ class MainWindow(QMainWindow):
             self.track.store(file_path)
 
     def save_track(self):
-        # Hier kann die Speicherlogik ergänzt werden
         if self.track.file_path:
             self.track.store()
         else: 

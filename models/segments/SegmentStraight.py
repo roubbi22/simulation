@@ -1,7 +1,7 @@
 from custom_types.EndVector import EndVector
 from models.segments import BaseSegment
 from view import ItemSegmentStraight
-from typing import Literal, TYPE_CHECKING
+from typing import Union, Literal, TYPE_CHECKING
 
 from models.segments import SegmentEnd
 
@@ -18,6 +18,7 @@ class SegmentStraight(BaseSegment):
             "length": length,
             "coords": coords,
         }
+        self.length = length
         self.ends = {
             "a": SegmentEnd((0, 0, 0), self),
             "b": SegmentEnd((0, length, 180), self) 
@@ -48,6 +49,22 @@ class SegmentStraight(BaseSegment):
         coords = self.ends[from_end].vector + (diff_vector * percentage)
         coords.angle = (self.ends[from_end].vector.angle + 180) % 360 
         return coords
+    
+    def move_by_distance(self, from_end: Union[str, SegmentEnd], previous_percentage: float, distance = 0):
+        from_end_key = from_end
+        if isinstance(from_end, SegmentEnd): 
+            for k, v in self.ends.items():
+                print(k, v, v.connected_to)
+                if v is from_end:
+                    from_end_key = k
+
+        remaining_segment_distance = self.length * (1 - previous_percentage)
+        to_end_key = "b" if from_end_key == "a" else "a"
+        to_end = self.ends[to_end_key]
+        if distance > remaining_segment_distance:
+            return to_end.connected_to.parent_segment.move_by_distance(to_end.connected_to, 0, distance - remaining_segment_distance)
+        new_percentage = previous_percentage + (distance / self.length)
+        return (self, from_end_key, to_end_key, new_percentage)
 
     def update_view(self):
         return super().update_view()

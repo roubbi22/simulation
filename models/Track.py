@@ -153,9 +153,7 @@ class Track:
 
         new_segments = data["segments"]
 
-        for segment in self.segments.values():
-            self.scene.removeItem(segment.graphical_representation)
-        
+        self.scene.clear()
         self.segments = {}
 
         segment_types = {
@@ -236,3 +234,7 @@ class Track:
 
 
         pass
+
+    def simulate(self, delta_t: float = 1/30):
+        for vehicle in self.vehicles.values():
+            vehicle.move(delta_t=delta_t)

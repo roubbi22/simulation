@@ -41,6 +41,8 @@ class ItemSegmentEnd(QGraphicsEllipseItem):
         self.direction_line.setZValue(11)
 
         self.setPos(self.parent_segment_end.vector.x, self.parent_segment_end.vector.y)
+        if self.scene():
+            self.scene().update()
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
@@ -154,8 +156,9 @@ class ItemSegmentStraight(GraphicBaseSegment):
         path.moveTo(vector_a.x, vector_a.y)
         path.lineTo(vector_b.x, vector_b.y)
         self.setPath(path)
-
-        self.setPen(QPen(self.display_color, 4))             
+        self.setPen(QPen(self.display_color, 4))
+        if self.scene:
+            self.scene.update()
 
 class ItemSegmentCurve(GraphicBaseSegment):
     def __init__(self, model_segment, scene):
@@ -189,6 +192,8 @@ class ItemSegmentCurve(GraphicBaseSegment):
 
         self.setPath(path)
         self.setPen(QPen(self.display_color, 4))
+        if self.scene:
+            self.scene.update()
 
 class ItemSegmentSwitch(GraphicBaseSegment):
     def __init__(self, model_segment, scene):
@@ -221,8 +226,9 @@ class ItemSegmentSwitch(GraphicBaseSegment):
         )
         path.lineTo(vector_b.x, vector_b.y)
         self.setPath(path)
-
         self.setPen(QPen(self.display_color, 4))
+        if self.scene:
+            self.scene.update()
 
         rect = QRectF(center_x - radius, center_y - radius, 2 * radius, 2 * radius)
         
@@ -242,15 +248,12 @@ class ItemSegmentSwitch(GraphicBaseSegment):
 
         print(vector_a, rotation_center)
 
-        start_coords.rotate(rotation_center, - curve_offset)#
-
-        # print(start_coords)
+        start_coords.rotate(rotation_center, - curve_offset)
 
         directed_span_angle = span_angle if self.model.dir == "l" else -span_angle
 
         path.moveTo(start_coords.x, start_coords.y)
         path.arcTo(rect, start_angle + curve_offset, directed_span_angle - curve_offset)
-        # path.arcTo(rect, start_angle, directed_span_angle)
         self.setPath(path)
         self.setPen(QPen(self.display_color, 4))
 
@@ -300,3 +303,5 @@ class ItemVehicle(QGraphicsPathItem):
         self.direction_line.setZValue(12)
         self.setPos(self.model_vehicle.coords.x, self.model_vehicle.coords.y)
         self.setRotation(self.model_vehicle.coords.angle)
+        if self.scene:
+            self.scene.update()

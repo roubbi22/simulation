@@ -36,6 +36,8 @@ class SegmentSwitch(BaseSegment):
         self.angle = angle
         self.dir = dir
         self.switch_setting: Literal["b", "c"] = "b"
+        self.length_straight = radius / 2
+        self.length_curve = math.pi * radius * (angle / 180)
         
         self.translate(coords[0], coords[1])
         self.rotate(coords[2] + 180, "a")
@@ -86,6 +88,26 @@ class SegmentSwitch(BaseSegment):
     def toggle_switch_setting(self):
         self.switch_setting = "c" if self.switch_setting == "b" else "b"
         self.graphical_representation.update_from_model()
+
+    def move_by_distance(self, from_end: str, previous_percentage: float, distance = 0):
+        length = self.length_straight if self.switch_setting == "b" else self.length_curve
+        from_end_key = from_end
+        if isinstance(from_end, SegmentEnd): 
+            for k, v in self.ends.items():
+                print(k, v, v.connected_to)
+                if v is from_end:
+                    from_end_key = k
+
+        remaining_segment_distance = length * (1 - previous_percentage)
+
+        if from_end_key == "b" or from_end_key == "c": to_end_key = "a"
+        else: to_end_key = self.switch_setting
+
+        to_end = self.ends[to_end_key]
+        if distance > remaining_segment_distance:
+            return to_end.connected_to.parent_segment.move_by_distance(to_end.connected_to, 0, distance - remaining_segment_distance)
+        new_percentage = previous_percentage + (distance / length)
+        return (self, from_end_key, to_end_key, new_percentage)
 
     def update_view(self):
         return super().update_view()

@@ -6,9 +6,23 @@ from view import ItemVehicle
 class Vehicle:
     def __init__(self, scene, segment: BaseSegment, from_end: str, to_end: str, percentage: float = 0):
         self.position: Tuple[BaseSegment, str, str, float] = (segment, from_end, to_end, percentage) # Segment, from_end, to_end, percentage
-        self.speed: 0
+        self.speed: float = 50
         self.coords: EndVector = segment.get_coordinates_on_segment(from_end, to_end, percentage)
         self.graphical_representation: ItemVehicle = ItemVehicle(scene, self)
 
-    def move(self):
-        pass
+    def move(self, distance: float = None, delta_t: float = None):
+        if delta_t:
+            distance = self.speed * delta_t
+        if not distance and not delta_t:
+            print("either distance or delta_t must be provided")
+        if self.graphical_representation and self.graphical_representation.scene:
+            self.graphical_representation.scene.removeItem(self.graphical_representation)
+            scene = self.graphical_representation.scene
+        else:
+            scene = None
+        self.position = self.position[0].move_by_distance(self.position[1], self.position[3], distance)
+        self.coords = self.position[0].get_coordinates_on_segment(self.position[1], self.position[2], self.position[3])
+        self.graphical_representation = ItemVehicle(scene, self)
+        self.graphical_representation.update_from_model()
+        if scene:
+            scene.update()
