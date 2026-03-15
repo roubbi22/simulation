@@ -237,4 +237,4 @@ class Track:
 
     def simulate(self, delta_t: float = 1/30):
         for vehicle in self.vehicles.values():
-            vehicle.move(delta_t=delta_t)
+            vehicle.update(delta_t=delta_t)
