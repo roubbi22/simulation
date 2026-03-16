@@ -255,8 +255,6 @@ class ItemSegmentSwitch(GraphicBaseSegment):
             start_y + (math.sin(np.radians(vector_a.angle)) * self.model.radius) if self.model.dir == "l" else start_y + (-math.sin(np.radians(vector_a.angle)) * self.model.radius),
         )
 
-        # print(vector_a, rotation_center)
-
         start_coords.rotate(rotation_center, - curve_offset)
 
         directed_span_angle = span_angle if self.model.dir == "l" else -span_angle

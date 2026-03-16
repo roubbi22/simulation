@@ -8,7 +8,7 @@ class Vehicle:
         self.position: Tuple[BaseSegment, str, str, float] = (segment, from_end, to_end, percentage) # Segment, from_end, to_end, percentage
         self.speed: float = 0
         self.target_speed: float = -100 # mm/2
-        self.acceleration = 1000 # mm/s^2
+        self.acceleration = 100 # mm/s^2
         self.coords: EndVector = segment.get_coordinates_on_segment(from_end, to_end, percentage)
         self.graphical_representation: ItemVehicle = ItemVehicle(scene, self)
 

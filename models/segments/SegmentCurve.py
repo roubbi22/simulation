@@ -82,7 +82,6 @@ class SegmentCurve(BaseSegment):
         from_end_key = from_end
         if isinstance(from_end, SegmentEnd): 
             for k, v in self.ends.items():
-                # print(k, v, v.connected_to)
                 if v is from_end:
                     from_end_key = k
         else:

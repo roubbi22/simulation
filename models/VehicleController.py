@@ -1,10 +1,19 @@
 import networkx as nx
-from typing import Dict, TYPE_CHECKING
+import threading
+from typing import Dict, TypedDict, TYPE_CHECKING
 
+from models.segments.BaseSegment import BaseSegment
 from vehicle import Vehicle
 
 if TYPE_CHECKING:
     from models.Track import Track 
+
+class VehicleControllerVehicle(TypedDict):
+    vehicle: Vehicle
+    destination_node: str
+    last_segment: BaseSegment | None
+    route: list[str]
+    arriving: bool
 
 
 class VehicleController():
@@ -20,24 +29,26 @@ class VehicleController():
         self.track_graph: nx.Graph = self.track.get_track_graph()
         self.vehicles: Dict[
             str,
-            Dict
+            VehicleControllerVehicle
         ] = {}
-        pass
+        self.lock = threading.Lock()
 
     def update_track(self):
         self.track_graph = self.track.get_track_graph()
 
     def add_vehicle(self, vehicle: Vehicle, vehicle_id: str):
-        destination_node = self.track.get_random_end(return_type="end_id")
-        self.vehicles[vehicle_id] = {
-            "vehicle": vehicle,
-            "destination_node": destination_node,
-            "last_segment": None,
-            "route": self._get_best_route(
-                vehicle.position[0].ends[vehicle.position[1]].get_end_id(True),
-                destination_node,
-            )
-        }
+        with self.lock:
+            destination_node = self.track.get_random_end(return_type="end_id")
+            self.vehicles[vehicle_id] = {
+                "vehicle": vehicle,
+                "destination_node": destination_node,
+                "last_segment": None,
+                "route": self._get_best_route(
+                    vehicle.position[0].ends[vehicle.position[1]].get_end_id(True),
+                    destination_node,
+                ),
+                "arriving": False,
+            }
 
     def _get_best_route(self, origin_node_id, destination_node_id):
         path = nx.shortest_path(self.track_graph, origin_node_id, destination_node_id)
@@ -63,22 +74,29 @@ class VehicleController():
 
     
     def control(self):
-        for vehicle in self.vehicles.values():
-            if vehicle["vehicle"].position[0] is not vehicle["last_segment"]:
-                v_t_speed = vehicle["vehicle"].target_speed
-                v_pos = vehicle["vehicle"].position
-                origin_end_id = v_pos[0].ends[v_pos[2 if v_t_speed < 0 else 1]].get_end_id(True)
-                vehicle["route"] = self._get_best_route(
-                    origin_end_id,
-                    vehicle["destination_node"],
-                )
-                next_edge_id = v_pos[0].ends[v_pos[1 if v_t_speed < 0 else 2]].get_end_id(True)
-                if next_edge_id not in set(vehicle["route"]):
-                    if v_t_speed > 0:
-                        vehicle["vehicle"].set_target_speed(-200)
-                    else:
-                        vehicle["vehicle"].set_target_speed(200)
-                
+        with self.lock:
+            for vehicle in self.vehicles.values():
+                if vehicle["vehicle"].position[0] is not vehicle["last_segment"]:
+                    if vehicle["arriving"]:
+                        return vehicle["vehicle"].set_target_speed(0)
+                    v_t_speed = vehicle["vehicle"].target_speed
+                    v_pos = vehicle["vehicle"].position
+                    print(vehicle["route"][-1])
+                    if v_pos[0].ends[v_pos[2]].get_end_id(True) == vehicle["route"][-1]:
+                        vehicle["arriving"] = True
+                        print("arriving...")
+                    origin_end_id = v_pos[0].ends[v_pos[2 if v_t_speed < 0 else 1]].get_end_id(True)
+                    vehicle["route"] = self._get_best_route(
+                        origin_end_id,
+                        vehicle["destination_node"],
+                    )
+                    next_edge_id = v_pos[0].ends[v_pos[1 if v_t_speed < 0 else 2]].get_end_id(True)
+                    if next_edge_id not in set(vehicle["route"]):
+                        if v_t_speed > 0:
+                            vehicle["vehicle"].set_target_speed(-200)
+                        else:
+                            vehicle["vehicle"].set_target_speed(200)
 
-                vehicle["last_segment"] = vehicle["vehicle"].position[0]
+
+                    vehicle["last_segment"] = vehicle["vehicle"].position[0]
 
