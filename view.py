@@ -90,7 +90,7 @@ class GraphicBaseSegment(QGraphicsPathItem):
         super().__init__()
         self.model: BaseSegment = model_segment
         self.scene: QGraphicsScene = scene
-        self.display_color: QColor = QColor("#333333")
+        self.display_color = QColor("#333333")
         self.original_color: QColor = QColor("#333333")
         if self.model:
             self.update_from_model()
@@ -156,7 +156,10 @@ class ItemSegmentStraight(GraphicBaseSegment):
         path.moveTo(vector_a.x, vector_a.y)
         path.lineTo(vector_b.x, vector_b.y)
         self.setPath(path)
-        self.setPen(QPen(self.display_color, 4))
+        if not self.model.annotated:
+            self.setPen(QPen(self.display_color, 4))
+        else:
+            self.setPen(QPen(QColor('#33ff00'), 4))
         if self.scene:
             self.scene.update()
 
@@ -191,7 +194,10 @@ class ItemSegmentCurve(GraphicBaseSegment):
         path.arcTo(rect, start_angle, span_angle)
 
         self.setPath(path)
-        self.setPen(QPen(self.display_color, 4))
+        if not self.model.annotated:
+            self.setPen(QPen(self.display_color, 4))
+        else:
+            self.setPen(QPen(QColor('#33ff00'), 4))
         if self.scene:
             self.scene.update()
 
@@ -226,7 +232,10 @@ class ItemSegmentSwitch(GraphicBaseSegment):
         )
         path.lineTo(vector_b.x, vector_b.y)
         self.setPath(path)
-        self.setPen(QPen(self.display_color, 4))
+        if not self.model.annotated:
+            self.setPen(QPen(self.display_color, 4))
+        else:
+            self.setPen(QPen(QColor('#33ff00'), 4))
         if self.scene:
             self.scene.update()
 
@@ -246,7 +255,7 @@ class ItemSegmentSwitch(GraphicBaseSegment):
             start_y + (math.sin(np.radians(vector_a.angle)) * self.model.radius) if self.model.dir == "l" else start_y + (-math.sin(np.radians(vector_a.angle)) * self.model.radius),
         )
 
-        print(vector_a, rotation_center)
+        # print(vector_a, rotation_center)
 
         start_coords.rotate(rotation_center, - curve_offset)
 
@@ -255,7 +264,10 @@ class ItemSegmentSwitch(GraphicBaseSegment):
         path.moveTo(start_coords.x, start_coords.y)
         path.arcTo(rect, start_angle + curve_offset, directed_span_angle - curve_offset)
         self.setPath(path)
-        self.setPen(QPen(self.display_color, 4))
+        if not self.model.annotated:
+            self.setPen(QPen(self.display_color, 4))
+        else:
+            self.setPen(QPen(QColor('#33ff00'), 4))
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.RightButton:

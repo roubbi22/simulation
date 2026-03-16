@@ -7,8 +7,8 @@ class Vehicle:
     def __init__(self, scene, segment: BaseSegment, from_end: str, to_end: str, percentage: float = 0):
         self.position: Tuple[BaseSegment, str, str, float] = (segment, from_end, to_end, percentage) # Segment, from_end, to_end, percentage
         self.speed: float = 0
-        self.target_speed: float = 200 # mm/2
-        self.acceleration = 50 # mm/s^2
+        self.target_speed: float = -100 # mm/2
+        self.acceleration = 1000 # mm/s^2
         self.coords: EndVector = segment.get_coordinates_on_segment(from_end, to_end, percentage)
         self.graphical_representation: ItemVehicle = ItemVehicle(scene, self)
 
@@ -16,8 +16,11 @@ class Vehicle:
         self.simulate(delta_t=delta_t)
         
     def simulate(self, delta_t):
-        if abs(self.target_speed - self.speed) > 0.5:
-            self.speed = self.speed + self.acceleration * (delta_t if self.target_speed > self.speed else - delta_t)
+        if((self.target_speed - 0.5) > self.speed ):
+            self.speed = self.speed + self.acceleration * delta_t
+        elif((self.target_speed + 0.5) < self.speed ):
+            self.speed = self.speed - self.acceleration * delta_t
+
         self.move(delta_t=delta_t)
 
     def move(self, distance: float = None, delta_t: float = None):
@@ -36,3 +39,6 @@ class Vehicle:
         self.graphical_representation.update_from_model()
         if scene:
             scene.update()
+
+    def set_target_speed(self, target_speed):
+        self.target_speed = target_speed

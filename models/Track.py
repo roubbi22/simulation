@@ -1,10 +1,12 @@
 from PyQt6.QtWidgets import QGraphicsScene
+from models.VehicleController import VehicleController
 from models.segments import BaseSegment, SegmentStraight , SegmentCurve, SegmentSwitch, SegmentEnd
 from vehicle import Vehicle
 from custom_types.SegmentTypes import SegmentType
-from typing import Dict
+from typing import Dict, Literal
 import uuid
 import json
+import random
 
 import networkx as nx
 
@@ -15,6 +17,7 @@ class Track:
         self.vehicles: Dict[str, Vehicle] = {}
         self.altered_since_save = True
         self.file_path = None
+        self.vehicle_controller: VehicleController = None
         
     def add_segment(
             self,
@@ -56,6 +59,7 @@ class Track:
                         end.parent_segment.update_view()
 
             self.altered_since_save = True
+            self.vehicle_controller.update_track()
 
     def check_overlapping_ends(self, end_to_check: SegmentEnd, dist_tolerance=0.5, angle_tolerance=3) -> list[SegmentEnd]:
         # return list of overlapping Segment ends
@@ -77,10 +81,36 @@ class Track:
         self.segments = {k: v for k, v in self.segments.items() if v != segment}
         self.scene.removeItem(segment.graphical_representation)
         self.altered_since_save = True
+        self.vehicle_controller.update_track()
 
     def add_vehicle(self, vehicle: Vehicle):
         vehicle_id = uuid.uuid4()
         self.vehicles[vehicle_id] = vehicle
+        self.vehicle_controller.add_vehicle(vehicle, vehicle_id)
+
+    def get_random_end(self, return_type: Literal['end', 'end_id'] = 'end'):
+        segment_keys = self.segments.keys()
+        random_segment_key = random.choice(list(segment_keys))
+        random_segment = self.segments[random_segment_key]
+        end_keys = random_segment.ends.keys()
+        random_end_key = random.choice(list(end_keys))
+        random_end = random_segment.ends[random_end_key]   
+        if return_type == 'end_id':
+            own_id = random_end.get_end_id()
+            other_id = "end" if not random_end.connected_to else random_end.connected_to.get_end_id()
+            return f"{own_id}_{other_id}" if other_id == "end" or (own_id < other_id) else f"{other_id}_{own_id}"
+        return random_end
+    
+    def get_segment_by_end_ids(self, from_end_id:str, to_end_id:str):
+        segment_end_ids = from_end_id.split("_") + to_end_id.split("_")
+        segment_ids = [x.split(".")[0] for x in segment_end_ids]
+
+        seen_segments = set()
+        common_segment_id = next(
+            (segment_id for segment_id 
+             in segment_ids if segment_id in seen_segments or not seen_segments.add(segment_id))
+            )
+        return self.segments[common_segment_id]
 
     def _get_open_ends(self) -> list[SegmentEnd]:
         open_ends = []
@@ -190,11 +220,7 @@ class Track:
 
         self.altered_since_save = False
 
-    def find_best_route(self, starting_node=None, end_node=None, strategy=None):
-        """
-        retruns the best route from one node to another
-        requires starting node, end node and Strategy
-        """
+    def get_track_graph(self) -> nx.Graph:
         segments =self._get_segments_dict(False)
 
         G = nx.Graph()
@@ -232,9 +258,14 @@ class Track:
                 if "c" in ports and ports["c"] is not None:
                     edges.append((ports["a"], ports["c"]))
 
+        G.add_nodes_from(nodes)
+        G.add_edges_from(edges)
+
+        return G
 
         pass
 
     def simulate(self, delta_t: float = 1/30):
         for vehicle in self.vehicles.values():
+            self.vehicle_controller.control()
             vehicle.update(delta_t=delta_t)

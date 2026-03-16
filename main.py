@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QMainWi
 from PyQt6.QtGui import QColor, QPainter, QAction
 from PyQt6.QtCore import QTimer
 from models.Track import Track
+from models.VehicleController import VehicleController
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -15,6 +16,7 @@ class MainWindow(QMainWindow):
         self.scene = QGraphicsScene()
         self.scene.setBackgroundBrush(QColor("#E4E4E4"))
         self.track = Track(self.scene)
+        self.vehicle_controller = VehicleController(self.track)
 
         origin_point = self.track.scene.addEllipse(-2, -2, 4, 4)
         origin_point.setBrush(QColor("#FF0000"))
@@ -43,8 +45,11 @@ class MainWindow(QMainWindow):
 
         self.setMenuBar(menubar)
 
-        self.timer.timeout.connect(lambda: self.track.simulate(1/30))
+        self.timer.timeout.connect(lambda: self.simulate(1/30))
         self.timer.start(int(1000/30))
+
+    def simulate(self, delta_t):
+        self.track.simulate(delta_t)
 
     def open_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Datei auswählen", "", "JSON Dateien (*.json);;Alle Dateien (*)")

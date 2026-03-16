@@ -15,7 +15,8 @@ class BaseSegment(ABC):
         self.starting_end = starting_end
         self.metadata = {
             "starting_end": starting_end
-        }     
+        }
+        self.annotated = False
 
     @abstractmethod
     def update_view(self):
@@ -43,8 +44,18 @@ class BaseSegment(ABC):
         pass
 
     @abstractmethod
-    def move_by_distance(from_end: str, previous_percentage: float, distance: float = 0,) -> tuple:
+    def move_by_distance(from_end: str, previous_percentage: float, distance: float = 0) -> tuple:
         pass
+    
+    @abstractmethod
+    def get_opposite_end(self, end: SegmentEnd):
+        pass
+
+    def get_key(self):
+        for s_k, s_v in self.track.segments.items():
+            if s_v is self:
+                return s_k
+        return None
 
     def _reposition_for_end(self):
         if self.starting_end != "a":

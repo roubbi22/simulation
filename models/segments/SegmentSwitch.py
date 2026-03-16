@@ -89,14 +89,22 @@ class SegmentSwitch(BaseSegment):
         self.switch_setting = "c" if self.switch_setting == "b" else "b"
         self.graphical_representation.update_from_model()
 
+    def get_opposite_end(self, end: SegmentEnd):
+        if end.get_end_id().split(".")[1] == "c" or end.get_end_id().split(".")[1] == "b":
+            return self.ends["a"]
+        elif self.switch_setting == "b":
+            return self.ends["b"]
+        return self.ends["c"]
+
     def move_by_distance(self, from_end: str, previous_percentage: float, distance = 0):
         length = self.length_straight if self.switch_setting == "b" else self.length_curve
         from_end_key = from_end
         if isinstance(from_end, SegmentEnd): 
             for k, v in self.ends.items():
-                print(k, v, v.connected_to)
                 if v is from_end:
                     from_end_key = k
+        else:
+            from_end = self.ends[from_end_key]
 
         remaining_segment_distance = length * (1 - previous_percentage)
 
@@ -106,6 +114,11 @@ class SegmentSwitch(BaseSegment):
         to_end = self.ends[to_end_key]
         if distance > remaining_segment_distance:
             return to_end.connected_to.parent_segment.move_by_distance(to_end.connected_to, 0, distance - remaining_segment_distance)
+        elif distance < 0 and abs(distance) > length-remaining_segment_distance:
+            return from_end.connected_to.parent_segment.move_by_distance(
+                from_end.connected_to.parent_segment.get_opposite_end(from_end.connected_to),
+                1,
+                distance + (previous_percentage * length))
         new_percentage = previous_percentage + (distance / length)
         return (self, from_end_key, to_end_key, new_percentage)
 

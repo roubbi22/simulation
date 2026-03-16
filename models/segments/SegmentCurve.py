@@ -73,19 +73,31 @@ class SegmentCurve(BaseSegment):
             coords.rotate(rot_center, self.angle * percentage)
         return coords
     
+    def get_opposite_end(self, end: SegmentEnd):
+        if end.get_end_id().split(".")[1] == "a":
+            return self.ends["b"]
+        return self.ends["a"]
+    
     def move_by_distance(self, from_end: str, previous_percentage: float, distance = 0):
         from_end_key = from_end
         if isinstance(from_end, SegmentEnd): 
             for k, v in self.ends.items():
-                print(k, v, v.connected_to)
+                # print(k, v, v.connected_to)
                 if v is from_end:
                     from_end_key = k
-
+        else:
+            from_end = self.ends[from_end_key]
+        
         remaining_segment_distance = self.length * (1 - previous_percentage)
         to_end_key = "b" if from_end_key == "a" else "a"
         to_end = self.ends[to_end_key]
         if distance > remaining_segment_distance:
             return to_end.connected_to.parent_segment.move_by_distance(to_end.connected_to, 0, distance - remaining_segment_distance)
+        elif distance < 0 and abs(distance) > self.length-remaining_segment_distance:
+            return from_end.connected_to.parent_segment.move_by_distance(
+                from_end.connected_to.parent_segment.get_opposite_end(from_end.connected_to),
+                1,
+                distance + (previous_percentage * self.length))
         new_percentage = previous_percentage + (distance / self.length)
         return (self, from_end_key, to_end_key, new_percentage)
     pass
