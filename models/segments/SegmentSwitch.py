@@ -63,7 +63,7 @@ class SegmentSwitch(BaseSegment):
         if from_end == "c" or to_end == "c":
         # if self.switch_setting == "c":
             # get the coordinates of the center point
-            angle_to_center = self.ends["a"].vector.angle + 90
+            angle_to_center = self.ends["a"].vector.angle + (90 if self.dir == "l" else -90)
             rot_center = EndVector(
                 self.ends["a"].vector.x + (math.sin(np.radians(angle_to_center)) * self.radius),
                 self.ends["a"].vector.y - (math.cos(np.radians(angle_to_center)) * self.radius),
