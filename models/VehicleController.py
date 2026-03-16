@@ -2,6 +2,7 @@ import networkx as nx
 import threading
 from typing import Dict, TypedDict, TYPE_CHECKING
 
+from models.segments import SegmentSwitch
 from models.segments.BaseSegment import BaseSegment
 from vehicle import Vehicle
 
@@ -77,14 +78,35 @@ class VehicleController():
         with self.lock:
             for vehicle in self.vehicles.values():
                 if vehicle["vehicle"].position[0] is not vehicle["last_segment"]:
+
+                    for i in range(len(vehicle["route"]) -1, -1, -1):
+                        segment_end_ids = vehicle["route"][i - 1].split("_") + vehicle["route"][i].split("_")
+                        seen_segments = set()
+                        ends = {}
+
+                        for segment_end_id in segment_end_ids:
+                            if segment_end_id.split(".")[0] in seen_segments:
+                                duplicate_segment_id = segment_end_id.split(".")[0]
+                                duplicate_segment_end_ids = [segment_end_id.split(".")[1], ends[segment_end_id.split(".")[0]]]
+                            if segment_end_id != "end":
+                                ends[segment_end_id.split(".")[0]] = segment_end_id.split(".")[1]
+                            seen_segments.add(segment_end_id.split(".")[0])
+                            # print(seen_segments)
+
+                        print(duplicate_segment_id)
+                        switch_segment: BaseSegment = self.track.segments[duplicate_segment_id]
+                        if isinstance(switch_segment, SegmentSwitch):
+                            if "c" in duplicate_segment_end_ids:
+                                switch_segment.switch_setting = "c"
+                            elif "b" in duplicate_segment_end_ids:
+                                switch_segment.switch_setting = "b"
+
                     if vehicle["arriving"]:
                         return vehicle["vehicle"].set_target_speed(0)
                     v_t_speed = vehicle["vehicle"].target_speed
                     v_pos = vehicle["vehicle"].position
-                    print(vehicle["route"][-1])
                     if v_pos[0].ends[v_pos[2]].get_end_id(True) == vehicle["route"][-1]:
                         vehicle["arriving"] = True
-                        print("arriving...")
                     origin_end_id = v_pos[0].ends[v_pos[2 if v_t_speed < 0 else 1]].get_end_id(True)
                     vehicle["route"] = self._get_best_route(
                         origin_end_id,

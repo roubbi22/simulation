@@ -427,7 +427,7 @@
         "5d547204-56de-4d2e-9dad-335cebc36337": {
             "type": "sr",
             "connections": {
-                "a": null,
+                "a": "6efae5f0-9a9f-4427-bc02-8c26705aae97.a",
                 "b": "fe8f30c9-12ef-4c92-b0be-a35ff0a7077f.b",
                 "c": "7de7f1b9-67d7-4bea-9de5-b5c425d4daa2.c"
             },
@@ -649,7 +649,7 @@
         "c28e3d5b-9506-4cd7-86da-f887ea841037": {
             "type": "sl",
             "connections": {
-                "a": null,
+                "a": "948a46dd-5aec-4fd9-9db2-e98754591467.a",
                 "b": "a0b0061b-514c-4706-8292-195def5de9fe.b",
                 "c": "46e2aae0-cb59-44db-acd6-e8e9a08f24a0.c"
             },
@@ -1152,6 +1152,58 @@
                 "coords": [
                     1200.0,
                     -321.54,
+                    90
+                ]
+            }
+        },
+        "6efae5f0-9a9f-4427-bc02-8c26705aae97": {
+            "type": "st",
+            "connections": {
+                "a": "5d547204-56de-4d2e-9dad-335cebc36337.a",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    -0.0
+                ],
+                "b": [
+                    -200.0,
+                    -0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    0.0,
+                    -0.0,
+                    270
+                ]
+            }
+        },
+        "948a46dd-5aec-4fd9-9db2-e98754591467": {
+            "type": "st",
+            "connections": {
+                "a": "c28e3d5b-9506-4cd7-86da-f887ea841037.a",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    1800.0,
+                    -0.0
+                ],
+                "b": [
+                    2000.0,
+                    -0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length": 200,
+                "coords": [
+                    1800.0,
+                    0.0,
                     90
                 ]
             }
