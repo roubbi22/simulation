@@ -15,6 +15,7 @@ class SegmentCurve(BaseSegment):
         self.metadata = {
             **self.metadata,
             "radius": radius,
+            "length_a.b": math.pi * radius * (angle / 180),
             "angle": angle,
             "dir": dir,
             "coords": coords,

@@ -14,7 +14,8 @@ class SegmentSwitch(BaseSegment):
 
         self.metadata = {
             **self.metadata,
-            "length": length,
+            "length_a.b": length,
+            "length_a.c": radius * math.pi * (angle / 180),
             "radius": radius,
             "angle": angle,
             "dir": dir,

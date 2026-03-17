@@ -15,7 +15,7 @@ class SegmentStraight(BaseSegment):
             starting_end=starting_end)
         self.metadata = {
             **self.metadata,
-            "length": length,
+            "length_a.b": length,
             "coords": coords,
         }
         self.length = length

@@ -36,11 +36,11 @@ class Track:
 
         if coords:
             match segment_type:
-                case "Gerade": new_segment = SegmentStraight(self, kwargs.get("length", 200), coords, starting_end=new_segment_starting_end)
+                case "Gerade": new_segment = SegmentStraight(self, kwargs.get("length_a.b", 200), coords, starting_end=new_segment_starting_end)
                 case "Kurve links": new_segment = SegmentCurve(self, coords, kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "l"), starting_end=new_segment_starting_end)
                 case "Kurve rechts": new_segment = SegmentCurve(self, coords, kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "r"), starting_end=new_segment_starting_end)
-                case "Weiche links": new_segment = SegmentSwitch(self, coords, kwargs.get("length", 200), kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "l"), starting_end=new_segment_starting_end)
-                case "Weiche rechts": new_segment = SegmentSwitch(self, coords, kwargs.get("length", 200), kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "r"), starting_end=new_segment_starting_end)
+                case "Weiche links": new_segment = SegmentSwitch(self, coords, kwargs.get("length_a.b", 200), kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "l"), starting_end=new_segment_starting_end)
+                case "Weiche rechts": new_segment = SegmentSwitch(self, coords, kwargs.get("length_a.b", 200), kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "r"), starting_end=new_segment_starting_end)
 
             if segment_end:
                 segment_end.connected_to = new_segment.ends[new_segment_starting_end]
@@ -204,7 +204,8 @@ class Track:
             }
 
             additional_kwargs = {
-                "length": segment["metadata"].get("length", None),
+                "length_a.b": segment["metadata"].get("length_a.b", None),
+                "lenght_a.c": segment["metadata"].get("length_a.c", None),
                 "radius": segment["metadata"].get("radius", None),
                 "angle": segment["metadata"].get("angle", None),
                 "dir": segment["metadata"].get("dir", None),
@@ -221,7 +222,7 @@ class Track:
         self.altered_since_save = False
 
     def get_track_graph(self) -> nx.Graph:
-        segments =self._get_segments_dict(False)
+        segments =self._get_segments_dict(True)
 
         G = nx.Graph()
         nodes = {}
@@ -230,6 +231,7 @@ class Track:
 
         for segment_id, segment in segments.items():
             segment_type = segment["type"]
+            segment_meta = segment["metadata"]
             ports: Dict = segment["connections"]
 
             for port, value in ports.items():
@@ -251,12 +253,12 @@ class Track:
                 ports[port] = node_id
             
             if segment_type in ("st", "cl", "cr", "sl", "sr"):
-                edges.append((ports["a"], ports["b"]))
+                edges.append((ports["a"], ports["b"], {"length": segment_meta["length_a.b"]}))
             else:
                 print("segment not found")
             if segment_type in ("sl", "sr"):
                 if "c" in ports and ports["c"] is not None:
-                    edges.append((ports["a"], ports["c"]))
+                    edges.append((ports["a"], ports["c"], {"length": segment_meta["length_a.c"]}))
 
         G.add_nodes_from(nodes)
         G.add_edges_from(edges)

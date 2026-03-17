@@ -18,7 +18,7 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
                 "coords": [
                     0,
                     0,
@@ -45,6 +45,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -73,6 +74,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -101,6 +103,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -129,6 +132,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -157,6 +161,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -185,6 +190,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -212,7 +218,7 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
                 "coords": [
                     200.0,
                     -800.0,

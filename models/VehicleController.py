@@ -6,6 +6,8 @@ from models.segments import SegmentSwitch
 from models.segments.BaseSegment import BaseSegment
 from vehicle import Vehicle
 
+from pathfinding_strategies.Dijkstra import Dijkstra
+
 if TYPE_CHECKING:
     from models.Track import Track 
 
@@ -52,8 +54,14 @@ class VehicleController():
             }
 
     def _get_best_route(self, origin_node_id, destination_node_id):
-        path = nx.shortest_path(self.track_graph, origin_node_id, destination_node_id)
-
+        # path = nx.shortest_path(self.track_graph, origin_node_id, destination_node_id)
+        
+        dijkstra = Dijkstra()
+        # train_length = 200
+        # path = astar.find_path(self.track_graph, origin_node_id, destination_node_id, train_length=train_length)
+        path = dijkstra.find_path(self.track_graph, origin_node_id, destination_node_id)
+        # print("path: ", path)
+        
         prev_ids = ""
         segment_ids = []
         for vehicle_key in self.vehicles.keys():
@@ -83,7 +91,7 @@ class VehicleController():
                         segment_end_ids = vehicle["route"][i - 1].split("_") + vehicle["route"][i].split("_")
                         seen_segments = set()
                         ends = {}
-
+                        # print("segment_end_ids: ", segment_end_ids)
                         for segment_end_id in segment_end_ids:
                             if segment_end_id.split(".")[0] in seen_segments:
                                 duplicate_segment_id = segment_end_id.split(".")[0]
@@ -91,9 +99,9 @@ class VehicleController():
                             if segment_end_id != "end":
                                 ends[segment_end_id.split(".")[0]] = segment_end_id.split(".")[1]
                             seen_segments.add(segment_end_id.split(".")[0])
-                            # print(seen_segments)
+                            # print("seen_segments: ", seen_segments)
 
-                        print(duplicate_segment_id)
+                        # print(duplicate_segment_id)
                         switch_segment: BaseSegment = self.track.segments[duplicate_segment_id]
                         if isinstance(switch_segment, SegmentSwitch):
                             if "c" in duplicate_segment_end_ids:

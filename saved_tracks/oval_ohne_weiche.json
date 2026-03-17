@@ -3,7 +3,7 @@
         "664a024c-921c-4006-866b-be973ff41bd0": {
             "type": "st",
             "connections": {
-                "a": "988a3dd6-2717-4b72-937d-5bacdbcd74ba.a",
+                "a": "29e67862-40f5-4e1b-ae1f-4146c3b41f64.a",
                 "b": "a0956d93-d397-4d00-91c6-3f5415c7aa43.a"
             },
             "location": {
@@ -175,7 +175,7 @@
             "type": "st",
             "connections": {
                 "a": "39133d1e-5672-4e93-ab3a-e22717f34e47.b",
-                "b": "0fc3d8e6-a1ba-4543-9858-1aaccdbe6375.a"
+                "b": "d99f885c-648b-44bb-8d04-29a086793a02.a"
             },
             "location": {
                 "a": [
@@ -194,122 +194,6 @@
                     200.0,
                     -800.0,
                     270
-                ]
-            }
-        },
-        "5e0d72a3-8a1d-4a1a-81df-7ae0bdd8e4df": {
-            "type": "cl",
-            "connections": {
-                "a": "0fc3d8e6-a1ba-4543-9858-1aaccdbe6375.c",
-                "b": "373f61d3-9872-4231-9c4a-d2963920f8a1.a"
-            },
-            "location": {
-                "a": [
-                    -200.0,
-                    746.41
-                ],
-                "b": [
-                    -346.41,
-                    600.0
-                ]
-            },
-            "metadata": {
-                "starting_end": "a",
-                "radius": 400,
-                "length_a.b": 209.43951023931953,
-                "angle": 30,
-                "dir": "l",
-                "coords": [
-                    -200.0,
-                    -746.41,
-                    240
-                ]
-            }
-        },
-        "373f61d3-9872-4231-9c4a-d2963920f8a1": {
-            "type": "cl",
-            "connections": {
-                "a": "5e0d72a3-8a1d-4a1a-81df-7ae0bdd8e4df.b",
-                "b": "f7094932-1fcc-4785-9b10-3e4c1737ccd8.a"
-            },
-            "location": {
-                "a": [
-                    -346.41,
-                    600.0
-                ],
-                "b": [
-                    -400.0,
-                    400.0
-                ]
-            },
-            "metadata": {
-                "starting_end": "a",
-                "radius": 400,
-                "length_a.b": 209.43951023931953,
-                "angle": 30,
-                "dir": "l",
-                "coords": [
-                    -346.41,
-                    -600.0,
-                    210
-                ]
-            }
-        },
-        "f7094932-1fcc-4785-9b10-3e4c1737ccd8": {
-            "type": "cl",
-            "connections": {
-                "a": "373f61d3-9872-4231-9c4a-d2963920f8a1.b",
-                "b": "4811db41-79f4-4a6f-a377-350be52ae6ae.a"
-            },
-            "location": {
-                "a": [
-                    -400.0,
-                    400.0
-                ],
-                "b": [
-                    -346.41,
-                    200.0
-                ]
-            },
-            "metadata": {
-                "starting_end": "a",
-                "radius": 400,
-                "length_a.b": 209.43951023931953,
-                "angle": 30,
-                "dir": "l",
-                "coords": [
-                    -400.0,
-                    -400.0,
-                    180
-                ]
-            }
-        },
-        "4811db41-79f4-4a6f-a377-350be52ae6ae": {
-            "type": "cl",
-            "connections": {
-                "a": "f7094932-1fcc-4785-9b10-3e4c1737ccd8.b",
-                "b": "988a3dd6-2717-4b72-937d-5bacdbcd74ba.c"
-            },
-            "location": {
-                "a": [
-                    -346.41,
-                    200.0
-                ],
-                "b": [
-                    -200.0,
-                    53.59
-                ]
-            },
-            "metadata": {
-                "starting_end": "a",
-                "radius": 400,
-                "length_a.b": 209.43951023931953,
-                "angle": 30,
-                "dir": "l",
-                "coords": [
-                    -346.41,
-                    -200.0,
-                    150
                 ]
             }
         },
@@ -342,45 +226,10 @@
                 ]
             }
         },
-        "0fc3d8e6-a1ba-4543-9858-1aaccdbe6375": {
-            "type": "sl",
-            "connections": {
-                "a": "f32b8e47-d0a5-47a8-9ca0-a7b6c6229e82.b",
-                "b": "be80cd24-b057-4ca3-b741-3689830a9651.a",
-                "c": "5e0d72a3-8a1d-4a1a-81df-7ae0bdd8e4df.a"
-            },
-            "location": {
-                "a": [
-                    0.0,
-                    800.0
-                ],
-                "b": [
-                    -200.0,
-                    800.0
-                ],
-                "c": [
-                    -200.0,
-                    746.41
-                ]
-            },
-            "metadata": {
-                "starting_end": "a",
-                "length_a.b": 200,
-                "length_a.c": 209.43951023931953,
-                "radius": 400,
-                "angle": 30,
-                "dir": "l",
-                "coords": [
-                    0.0,
-                    -800.0,
-                    270
-                ]
-            }
-        },
         "be80cd24-b057-4ca3-b741-3689830a9651": {
             "type": "cl",
             "connections": {
-                "a": "0fc3d8e6-a1ba-4543-9858-1aaccdbe6375.b",
+                "a": "d99f885c-648b-44bb-8d04-29a086793a02.b",
                 "b": "ebc763e7-c95d-4fe5-8b09-0a616b179afc.a"
             },
             "location": {
@@ -526,7 +375,7 @@
             "type": "cl",
             "connections": {
                 "a": "8fa718bc-e388-4b71-abb9-af81a287042a.b",
-                "b": "988a3dd6-2717-4b72-937d-5bacdbcd74ba.b"
+                "b": "29e67862-40f5-4e1b-ae1f-4146c3b41f64.b"
             },
             "location": {
                 "a": [
@@ -551,38 +400,55 @@
                 ]
             }
         },
-        "988a3dd6-2717-4b72-937d-5bacdbcd74ba": {
-            "type": "sr",
+        "29e67862-40f5-4e1b-ae1f-4146c3b41f64": {
+            "type": "st",
             "connections": {
                 "a": "664a024c-921c-4006-866b-be973ff41bd0.a",
-                "b": "c3c6c158-55ad-40ff-baa7-ef7f08ce2163.b",
-                "c": "4811db41-79f4-4a6f-a377-350be52ae6ae.b"
+                "b": "c3c6c158-55ad-40ff-baa7-ef7f08ce2163.b"
             },
             "location": {
                 "a": [
                     0.0,
-                    0.0
+                    -0.0
                 ],
                 "b": [
                     -200.0,
                     -0.0
-                ],
-                "c": [
-                    -200.0,
-                    53.59
                 ]
             },
             "metadata": {
-                "starting_end": "b",
+                "starting_end": "a",
                 "length_a.b": 200,
-                "length_a.c": 209.43951023931953,
-                "radius": 400,
-                "angle": 30,
-                "dir": "r",
                 "coords": [
+                    0.0,
+                    0.0,
+                    270
+                ]
+            }
+        },
+        "d99f885c-648b-44bb-8d04-29a086793a02": {
+            "type": "st",
+            "connections": {
+                "a": "f32b8e47-d0a5-47a8-9ca0-a7b6c6229e82.b",
+                "b": "be80cd24-b057-4ca3-b741-3689830a9651.a"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    800.0
+                ],
+                "b": [
                     -200.0,
-                    -0.0,
-                    90
+                    800.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    0.0,
+                    -800.0,
+                    270
                 ]
             }
         }
