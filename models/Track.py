@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QGraphicsScene
 from models.VehicleController import VehicleController
 from models.segments import BaseSegment, SegmentStraight , SegmentCurve, SegmentSwitch, SegmentEnd
+from utils.edge_positions import get_curve_edge_position, get_edge_position, get_straight_edge_position
 from vehicle import Vehicle
 from custom_types.SegmentTypes import SegmentType
 from typing import Dict, Literal
@@ -264,8 +265,71 @@ class Track:
         G.add_edges_from(edges)
 
         return G
+    
+    def get_track_digraph(self) -> nx.DiGraph:
+        SWITCH_ABBREVIATIONS = ["sr", "sl"]
+        CURVE_ABBREVIATIONS = ["cr", "cl"]
 
-        pass
+        segments = self._get_segments_dict()
+
+        G = nx.DiGraph()
+        nodes = []
+        edges = []
+        pos = {}
+
+        for segment_id, segment in segments.items():
+            segment_type = segment["type"]
+            segment_ends = segment["connections"]
+
+            nodes.append((f"{segment_id}.b_a", {"length": segment["metadata"]["length_a.b"]}))
+            nodes.append((f"{segment_id}.a_b", {"length": segment["metadata"]["length_a.b"]}))
+
+            if segment_type not in CURVE_ABBREVIATIONS:
+                pos[f"{segment_id}.b_a"] = get_edge_position(segment, "b", "a")
+                pos[f"{segment_id}.a_b"] = get_edge_position(segment, "a", "b")
+            else:
+                pos[f"{segment_id}.b_a"] = get_edge_position(segment, "b", "a")
+                pos[f"{segment_id}.a_b"] = get_edge_position(segment, "a", "b")
+
+            if segment_type in SWITCH_ABBREVIATIONS:
+                nodes.append((f"{segment_id}.c_a", {"length": segment["metadata"]["length_a.b"]}))
+                nodes.append((f"{segment_id}.a_c", {"length": segment["metadata"]["length_a.c"]}))
+                pos[f"{segment_id}.c_a"] = get_edge_position(segment, "c", "a")
+                pos[f"{segment_id}.a_c"] = get_edge_position(segment, "a", "c")
+
+        for segment_id, segment in segments.items():
+            segment_ends = segment["connections"]
+            for end, transition in segment_ends.items():
+            
+                connected_id = transition.split('.')[0] if transition != None else "None"
+                connected_type = segments[connected_id]['type'] if transition != None else "None"
+                connected_end = transition.split('.')[1] if transition != None else "None"
+
+                opposite_ends = ["a" if end in ["b", "c"] else "b"]
+                if end == "a" and segment["type"] in SWITCH_ABBREVIATIONS: # if segment is of type switch and end is "a", add "c" to opposite ends
+                    opposite_ends.append("c")
+
+                own_directional_edges = []
+                for opposite_end in opposite_ends:
+                    own_directional_edges.append(f"{segment_id}.{opposite_end}_{end}")
+
+                # if end is connected to a root-end of a switch, add transition-edge to the diverging branch-end (c)
+                if connected_type in SWITCH_ABBREVIATIONS and connected_end == "a":
+                    for own_directional_edge in own_directional_edges:
+                        edges.append((own_directional_edge, f"{connected_id}.a_c", {"virtual_saw": False}))
+                for own_directional_edge in own_directional_edges:
+                    if connected_id != "None":
+                        edges.append((own_directional_edge, f"{connected_id}.{connected_end}_{"b" if connected_end == "a" else "a"}", {"virtual_saw": False}))
+
+            # if segment is of type switch, add virtual edges, that connect branch ends for saw-routes
+            if segment["type"] in SWITCH_ABBREVIATIONS:
+                edges.append((f"{segment_id}.c_a", f"{segment_id}.a_b", {"virtual_saw": True}))
+                edges.append((f"{segment_id}.b_a", f"{segment_id}.a_c", {"virtual_saw": True}))
+
+        G.add_nodes_from(nodes)
+        G.add_edges_from(edges)
+        
+        return G
 
     def simulate(self, delta_t: float = 1/30):
         for vehicle in self.vehicles.values():

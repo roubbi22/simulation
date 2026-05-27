@@ -48,7 +48,7 @@ class BaseSegment(ABC):
         pass
     
     @abstractmethod
-    def get_opposite_end(self, end: SegmentEnd):
+    def get_opposite_end(self, end: SegmentEnd) -> SegmentEnd:
         pass
 
     def get_key(self):

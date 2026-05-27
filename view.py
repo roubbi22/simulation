@@ -288,6 +288,8 @@ class ItemVehicle(QGraphicsPathItem):
         self.scene: QGraphicsScene = scene
         self.display_color: QColor = QColor("#333333")
         self.original_color: QColor = QColor("#333333")
+        self.wagon_items: list[QGraphicsPathItem] = []
+        self.direction_line = QGraphicsPathItem(self)
         if self.model_vehicle:
             self.update_from_model()
         if self.scene:
@@ -295,16 +297,35 @@ class ItemVehicle(QGraphicsPathItem):
         self.setAcceptHoverEvents(True)
 
 
+    def _vehicle_local_position(self, coords: EndVector) -> tuple[float, float]:
+        vehicle_coords = self.model_vehicle.coords
+        delta_x = coords.x - vehicle_coords.x
+        delta_y = coords.y - vehicle_coords.y
+        angle_rad = math.radians(-vehicle_coords.angle)
+        local_x = delta_x * math.cos(angle_rad) - delta_y * math.sin(angle_rad)
+        local_y = delta_x * math.sin(angle_rad) + delta_y * math.cos(angle_rad)
+        return local_x, local_y
+
+
+    def _clear_wagon_items(self):
+        for wagon_item in self.wagon_items:
+            if wagon_item.scene():
+                wagon_item.scene().removeItem(wagon_item)
+        self.wagon_items.clear()
+
+
     def update_from_model(self):
+        self._clear_wagon_items()
+
         path = QPainterPath()
-        rect = QRectF(-10, -25, 20, 50)
+        rect = QRectF(-10, -self.model_vehicle.locomotive_length/2, 20, self.model_vehicle.locomotive_length)
         path.addRect(rect)
-        path_dir = QPainterPath()
-        self.direction_line = QGraphicsPathItem(self)
+
         self.setPath(path)
         self.setPen(QPen(QColor("#123456"), 4))
         self.setBrush(QColor("#fdfeff"))
         self.setZValue(12) 
+
         dir_path = QPainterPath()
         dir_path.moveTo(0, -15)
         dir_path.lineTo(0, -30)
@@ -313,5 +334,25 @@ class ItemVehicle(QGraphicsPathItem):
         self.direction_line.setZValue(12)
         self.setPos(self.model_vehicle.coords.x, self.model_vehicle.coords.y)
         self.setRotation(self.model_vehicle.coords.angle)
+
+        for wagon in self.model_vehicle.wagons_front + self.model_vehicle.wagons_rear:
+            wagon_length, wagon_coords = wagon
+            if wagon_coords is None:
+                continue
+
+            wagon_path = QPainterPath()
+            wagon_path.addRect(QRectF(-10, -wagon_length / 2, 20, wagon_length))
+
+            wagon_item = QGraphicsPathItem(self)
+            wagon_item.setPath(wagon_path)
+            wagon_item.setPen(QPen(QColor("#123456"), 4))
+            wagon_item.setBrush(QColor("#fdfeff"))
+            wagon_item.setZValue(12.1)
+
+            local_x, local_y = self._vehicle_local_position(wagon_coords)
+            wagon_item.setPos(local_x, local_y)
+            wagon_item.setRotation(wagon_coords.angle - self.model_vehicle.coords.angle)
+            self.wagon_items.append(wagon_item)
+
         if self.scene:
             self.scene.update()

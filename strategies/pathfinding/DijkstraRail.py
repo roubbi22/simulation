@@ -1,5 +1,5 @@
 import networkx as nx
-from stratiegies.distance_checks import BaseDistanceCheck, DFSRail
+from strategies.distance_checks import BaseDistanceCheck, DFSRail
 
 class DijkstraRail:
     def __init__(self):

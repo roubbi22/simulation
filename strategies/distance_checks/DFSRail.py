@@ -2,7 +2,7 @@ from abc import ABC
 from typing import Tuple
 import networkx as nx
 
-from stratiegies.distance_checks.BaseDistanceCheck import BaseDistanceCheck
+from strategies.distance_checks.BaseDistanceCheck import BaseDistanceCheck
 
 class DFSRail(BaseDistanceCheck):
     def __init__(self):
