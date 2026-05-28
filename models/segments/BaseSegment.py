@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from custom_types.EndVector import EndVector
 from view import GraphicBaseSegment
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from models.Track import Track
@@ -17,6 +17,8 @@ class BaseSegment(ABC):
             "starting_end": starting_end
         }
         self.annotated = False
+        self.is_allowed_origin: None | Tuple[int, int] = None
+        self.is_allowed_destination: None | Tuple[int, int] = None
 
     @abstractmethod
     def update_view(self):

@@ -92,12 +92,72 @@ class GraphicBaseSegment(QGraphicsPathItem):
         self.scene: QGraphicsScene = scene
         self.display_color = QColor("#333333")
         self.original_color: QColor = QColor("#333333")
+        self.marker_items: list[QGraphicsPathItem] = []
         if self.model:
             self.update_from_model()
         if self.scene:
             self.scene.addItem(self)
         self.setAcceptHoverEvents(True)
 
+    def _set_origin_destination(self, is_origin: bool | None, is_destination: bool | None):
+        if is_origin is not None:
+            self.model.is_allowed_origin = (100, 100) if is_origin else None
+        if is_destination is not None:
+            self.model.is_allowed_destination = (100, 100) if is_destination else None
+        if self.model:
+            self.update_from_model()
+
+    def _clear_marker_items(self):
+        for marker_item in self.marker_items:
+            if marker_item.scene():
+                marker_item.scene().removeItem(marker_item)
+        self.marker_items.clear()
+
+    def _add_status_marker(self, is_origin: bool, is_destination: bool):
+        self._clear_marker_items()
+
+        if not is_origin and not is_destination:
+            return
+
+        path = self.path()
+        if path.isEmpty():
+            return
+
+
+
+        if is_origin:
+            origin_marker_path = QPainterPath()
+            origin_marker_path.addEllipse(QRectF(-7, -7, 14, 14))
+            origin_marker_path.addEllipse(QRectF(-3, -3, 6, 6))
+    
+            origin_marker_item = QGraphicsPathItem(self)
+            origin_marker_item.setPath(origin_marker_path)
+    
+            marker_point = path.pointAtPercent(0.5)
+            origin_marker_item.setPos(marker_point.x(), marker_point.y())
+            origin_marker_item.setRotation(path.angleAtPercent(0.5) - 90)
+            origin_marker_item.setZValue(self.zValue() + 2)
+            origin_marker_item.setBrush(QColor("black"))
+            origin_marker_item.setPen(QPen(QColor("black"), 1))
+
+            self.marker_items.append(origin_marker_item)
+        if is_destination:
+            destination_marker_path = QPainterPath()
+            destination_marker_path.addEllipse(QRectF(-10, -10, 20, 20))
+            destination_marker_path.addEllipse(QRectF(-7, -7, 14, 14))
+    
+            destination_marker_item = QGraphicsPathItem(self)
+            destination_marker_item.setPath(destination_marker_path)
+    
+            destmarker_point = path.pointAtPercent(0.5)
+            destination_marker_item.setPos(destmarker_point.x(), destmarker_point.y())
+            destination_marker_item.setRotation(path.angleAtPercent(0.5) - 90)
+            destination_marker_item.setZValue(self.zValue() + 2)
+            destination_marker_item.setBrush(QColor("white"))
+            destination_marker_item.setPen(QPen(QColor("black"), 1))
+
+            self.marker_items.append(destination_marker_item)
+    
     @abstractmethod
     def update_from_model(self):
         for key, end in self.model.ends.items():
@@ -132,9 +192,19 @@ class GraphicBaseSegment(QGraphicsPathItem):
         if event.button() == Qt.MouseButton.RightButton:
             menu = QMenu()
             menu.addAction("Segment entfernen", lambda: self.removeSegment())
-            menu.addAction("Startpunkt setzen", lambda x: x)
+            if self.model.is_allowed_origin:
+                menu.addAction("Startpunkt entfernen", lambda: self._set_origin_destination(False, None))
+            else:
+                menu.addAction("Startpunkt setzen", lambda: self._set_origin_destination(True, None))
+            if self.model.is_allowed_destination:
+                menu.addAction("Zielpunkt entfernen", lambda: self._set_origin_destination(None, False))
+            else:
+                menu.addAction("Zielpunkt setzen", lambda: self._set_origin_destination(None, True))
             menu.addAction("Fahrzeug positionieren", lambda :self._add_vehicle())
             menu.exec(event.screenPos())
+            # rerender
+            if self.scene:
+                self.scene.update()
         return super().mousePressEvent(event)
     
     def _add_vehicle(self):
@@ -160,6 +230,7 @@ class ItemSegmentStraight(GraphicBaseSegment):
             self.setPen(QPen(self.display_color, 4))
         else:
             self.setPen(QPen(QColor('#33ff00'), 4))
+        self._add_status_marker(bool(self.model.is_allowed_origin), bool(self.model.is_allowed_destination))
         if self.scene:
             self.scene.update()
 
@@ -198,6 +269,7 @@ class ItemSegmentCurve(GraphicBaseSegment):
             self.setPen(QPen(self.display_color, 4))
         else:
             self.setPen(QPen(QColor('#33ff00'), 4))
+        self._add_status_marker(bool(self.model.is_allowed_origin), bool(self.model.is_allowed_destination))
         if self.scene:
             self.scene.update()
 
@@ -236,6 +308,7 @@ class ItemSegmentSwitch(GraphicBaseSegment):
             self.setPen(QPen(self.display_color, 4))
         else:
             self.setPen(QPen(QColor('#33ff00'), 4))
+        self._add_status_marker(bool(self.model.is_allowed_origin), bool(self.model.is_allowed_destination))
         if self.scene:
             self.scene.update()
 
@@ -266,15 +339,26 @@ class ItemSegmentSwitch(GraphicBaseSegment):
             self.setPen(QPen(self.display_color, 4))
         else:
             self.setPen(QPen(QColor('#33ff00'), 4))
+        self._add_status_marker(bool(self.model.is_allowed_origin), bool(self.model.is_allowed_destination))
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.RightButton:
             menu = QMenu()
             menu.addAction("Segment entfernen", lambda: self.removeSegment())
-            menu.addAction("Startpunkt setzen", lambda x: x)
+            if self.model.is_allowed_origin:
+                menu.addAction("Startpunkt entfernen", lambda: self._set_origin_destination(False, None))
+            else:
+                menu.addAction("Startpunkt setzen", lambda: self._set_origin_destination(True, None))
+            if self.model.is_allowed_destination:
+                menu.addAction("Zielpunkt entfernen", lambda: self._set_origin_destination(None, False))
+            else:
+                menu.addAction("Zielpunkt setzen", lambda: self._set_origin_destination(None, True))
             menu.addAction("Fahrzeug positionieren", lambda :self._add_vehicle())
             menu.addAction("Weiche umstellen", self.toggle_switch)
             menu.exec(event.screenPos())
+            # rerender 
+            if self.scene:
+                self.scene.update()
         return super().mousePressEvent(event)
 
     def toggle_switch(self):
