@@ -9,10 +9,12 @@ if TYPE_CHECKING:
     from models.Track import Track
 
 class SegmentStraight(BaseSegment):
-    def __init__(self, track: "Track", length, coords: list, starting_end:Literal["a", "b"]="a"):
+    def __init__(self, track: "Track", length, coords: list, starting_end:Literal["a", "b"]="a", **kwargs):
         super().__init__(
             track=track,
-            starting_end=starting_end)
+            starting_end=starting_end,
+            **kwargs
+        )
         self.metadata = {
             **self.metadata,
             "length_a.b": length,

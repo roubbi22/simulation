@@ -1,0 +1,85 @@
+% Implementierung-Kapitel für die Bachelorarbeit
+\chapter{Implementierung}
+
+\section{Umsetzung der Simulationsumgebung}
+\label{ch:Implementierung:sec:Umsetzung der Simulationsumgebung}
+
+Dieses Kapitel beschreibt die technische Umsetzung der Simulationsumgebung, erläutert die Funktionsweise der wesentlichen Komponenten, die Daten-Speicherlogik sowie die Zugsteuerung und die Erkennung der Belegung von Gleissegmenten.
+
+\subsection*{Technische Umsetzung und Komponenten}
+Die Simulationsumgebung basiert auf einer modularen Python-Architektur. Die wichtigsten Komponenten und ihre Implementierungsdetails sind:
+- Orchestrator: \texttt{main.py} initialisiert die Simulation, lädt Track-Definitionen aus \texttt{saved\_tracks/} und startet Batchläufe. Konfigurationsparameter werden per JSON an die Startprozedur übergeben.
+- Datenmodell und Topologie: In \texttt{models/Track.py} werden Segmente als Objekte mit eindeutigen IDs, Typen (Gerade, Kurve, Weiche) und Nachbarschaftsbeziehungen modelliert. Jedes Segment hält geometrische Attribute (Länge, Krümmung) und logische Metadaten (Block-IDs, Weichen-Targets).
+- Segmentimplementierung: Die Klassen in \texttt{models/segments/} kapseln Verhalten und Schnittstellen für die Simulation (z. B. Methoden zur Berechnung der Position entlang eines Segments, Übergänge zu Nachbarsegmenten).
+- Fahrzeug- und Steuerungsschicht: \texttt{vehicle.py} enthält die Fahrzeugzustände (Position, Geschwindigkeit, Ziel), während der Controller die Schnittstelle zu Pfadfindern und Abstandsprüfungen bildet. Der Controller verwaltet Reservierungen und sendet Stellbefehle an Weichen über definierte Schnittstellen.
+- Strategien: Pfad- und Abstandsstrategien sind als austauschbare Module unter \texttt{strategies/} implementiert. Die Strategie-Schnittstelle definiert methodische Anforderungen (z. B. \texttt{compute\_path(start, goal)} und \texttt{check\_distance(vehicle)}).
+
+Die Komponenten kommunizieren über klar definierte Schnittstellen; Zustandsaktualisierungen erfolgen synchron in einer zentralen Simulationsschleife, um Race-Conditions zu vermeiden.
+
+\subsection*{Daten-Speicherlogik}
+Persistenz und Reproduzierbarkeit sind durch ein einfaches JSON-basiertes Schema realisiert. Kernelemente:
+- Track-Serialisierung: Streckendefinitionen werden als JSON-Dateien abgelegt (vgl. \texttt{saved\_tracks/}). Jedes Segment ist als Objekt mit Attributen (ID, Type, Length, Neighbors, Metadata) gespeichert.
+- Laufzeit-Logging: Laufzeitdaten (Positions-Logs, Ereignisse, Weichenstellungen) werden während der Simulation in rotierenden Log-Files oder direkt in JSON-Records geschrieben. Zusätzlich können aggregierte Metriken (z. B. durchschnittliche Fahrzeit) als CSV exportiert werden.
+- Konfigurationsdateien: Jede Experimentkonfiguration wird in einer separaten JSON-Datei abgelegt und zusammen mit Ergebnissen archiviert, um vollständige Reproduzierbarkeit zu gewährleisten.
+
+Technisch werden beim Laden der JSON-Dateien Validierungen durchgeführt (Schema-Prüfung, Konsistenz der Nachbarschaften). Fehler werden explizit geloggt und führen zum Abbruch der Simulation, um inkonsistente Experimente zu vermeiden.
+
+\subsection*{Zugsteuerung und Segmentbelegung}
+Die Zugsteuerung ist in zwei Ebenen implementiert: Low-Level-Bewegungslogik und High-Level-Reservierung/Weichensteuerung.
+- Low-Level: Das Fahrzeugmodell aktualisiert Position und Geschwindigkeit anhand einfacher physikalischer Regeln (Diskretisierung in Zeitschritten). Kollisionen werden durch Abstandsprüfungen verhindert.
+- High-Level: Vor Belegung eines Segments fragt der Controller dessen Verfügbarkeit ab und nimmt eine Reservierung vor. Reservierungen werden atomar verwaltet, sodass ein Segment pro Zeiteinheit nur von einem Fahrzeug als belegt betrachtet wird. In der Simulation wird die Segmentbelegung durch ein Tagging realisiert: Jedes Segment enthält ein Feld \texttt{occupied\_by} (ID des Fahrzeugs oder \texttt{null}). Wird ein Fahrzeug über einen Übergang bewegt, wird das Zielsegment zunächst mit einem temporären Tag versehen und nach erfolgreichem Abschluss des Übergangs als permanent markiert; das Quellsegment wird freigegeben.
+
+Dieses Vorgehen entspricht der Anforderung, dass Segmentpositionen nur über ein einzelnes Tag pro Gleissegment erkannt werden, und vermeidet Inkonsistenzen bei Überlappungen.
+
+\subsection*{Generierung eines gerichteten Graphen aus dem Datenmodell}
+Zur Pfadfindung wird aus dem in-memory Datenmodell ein gerichteter Graph abgeleitet. Umriss der Umsetzung:
+- Knoten: Jedes Segment wird zu einem Knoten im Graphen. Zusätzlich können Knoten für Weichenstellungen oder Fahrtrichtungen eingeführt werden, um Richtungsabhängigkeiten abzubilden.
+- Kanten: Kanten repräsentieren Übergänge zwischen Segmenten. Gewichte der Kanten basieren auf Distanz, erwarteter Fahrzeit und optionalen Kosten (z. B. Weichenstellungsaufwand, Sicherheitskosten).
+- Spezielle Behandlung von Weichen: Weichen erzeugen multiple gerichtete Kanten zu Zielsegmenten; Weichenstellungszustände werden als Attribute verwendet, um die Kosten dynamisch anzupassen.
+
+Die Generierung erfolgt bei Szenarioinitialisierung durch Traversierung des Segmentgraphs und Erstellung einer Adjazenzliste, die von den Pfadfindungsalgorithmen konsumiert wird. Dieses gerichtete Graphmodell erlaubt flexible Gewichtsanpassungen während der Simulation, z. B. um Sperrungen oder temporäre Reservierungen zu berücksichtigen.
+
+\section{Implementierung des Dijkstra-Rail Algorithmus}
+\label{ch:Implementierung:sec:Implementierung des Dijkstra-Rail Algorithmus}
+
+Dieser Abschnitt erläutert die Implementierung des auf Dijkstra basierenden Pfadfindungsalgorithmus, wie er auf das Schienennetzwerk angepasst wurde, und beschreibt Optimierungen und Testverfahren.
+
+\subsection*{Grundprinzip und Anpassungen}
+Der Algorithmus nutzt ein gerichtetes, kantengewichtetes Graphmodell (vgl. vorheriger Abschnitt). Anpassungen gegenüber einer Standard-Dijkstra-Implementierung umfassen:
+- Berücksichtigung von Weichen- und Richtungs-Kosten: Kantenkosten integrieren zusätzliche Metriken wie Weichenstellungsaufwand oder Richtungswechselkosten.
+- Dynamische Kostenanpassung: Kosten können zur Laufzeit modifiziert werden, um Reservierungen und Sperrungen zu berücksichtigen. Dazu wird vor der Ausführung eine Kopie der Adjazenzstruktur mit aktuellen Kostenänderungen erzeugt.
+- Limitierte Suche: Zur Performance-Optimierung kann die Suche durch heuristische Schranken (z. B. maximale Pfadlänge, Zeitbudget) vorzeitig abgebrochen werden.
+
+\subsection*{Datenstrukturen und Komplexität}
+Als zentrale Datenstrukturen werden verwendet:
+- Prioritätswarteschlange (Min-Heap) für die Auswahl des nächsten Knotens (\texttt{heapq}).
+- Distanz-Map: Assoziatives Array mit aktuellen kürzesten Distanzen.
+- Vorgänger-Map: Zur Rekonstruktion des Pfades.
+
+Die asymptotische Komplexität liegt bei O((V+E) log V) unter Verwendung eines Heaps, wobei V die Anzahl Knoten und E die Anzahl Kanten ist. Durch Restriktionen an der Suche und lokale Heuristiken reduziert sich die durchschnittliche Suchzeit in Praxisfällen.
+
+\subsection*{Implementierungsdetails}
+Wesentliche Implementierungsschritte:
+1. Konstruktion der Graph-Adjazenzliste aus dem Datenmodell (Segment-IDs als Knoten, gewichtete Kanten aus Übergängen).
+2. Vorinitialisierung: Anwenden dynamischer Kosten (gesperrte Segmente setzen Kantenkosten auf \(\infty\)), optionales Caching häufiger Pfadabschnitte.
+3. Ausführung von Dijkstra: Standard-Loop mit Heap, Relaxation der Kanten und frühzeitigem Abbruch bei Erreichen des Ziels.
+4. Pfad-Rekonstruktion über die Vorgänger-Map.
+
+Zur Vermeidung von Speicher- und Zeitproblemen werden Pfadberechnungen in separaten Threads oder Tasks ausgeführt, sodass die Simulationsschleife nicht blockiert wird; Ergebnisrückgabe erfolgt über Callback-Mechanismen oder Futures.
+
+\subsection*{Optimierungen und Erweiterungen}
+Mögliche und implementierte Optimierungen:
+- Caching: Für wiederkehrende Start-/Ziel-Paare werden Pfade zwischengespeichert.
+- Incremental Search: Bei geringen Änderungen der Kosten kann eine inkrementelle Suche (z. B. D* Lite) effizienter sein; die Codebasis ist so strukturiert, dass solche Algorithmen ergänzt werden können.
+- Parallelisierung: Pfadberechnungen für mehrere Fahrzeuge können parallelisiert werden; Care ist geboten bei Zugriffen auf gemeinsame Datenstrukturen.
+
+\subsection*{Tests und Validierung}
+Die Korrektheit des Algorithmus wurde durch Unit-Tests auf künstlichen Graphen und durch Vergleichsläufe gegen Referenzimplementierungen geprüft. Performance-Messungen erfolgen mittels Timing-Hooks und Profiling (\texttt{cProfile}).
+
+\subsection*{Integration in die Gesamtarchitektur}
+Der Dijkstra-Rail-Algorithmus ist als Modul unter \texttt{strategies/pathfinding/} implementiert und erfüllt die definierte Strategie-Schnittstelle. Er wird vom \texttt{VehicleController} aufgerufen, der Path-Futures verwaltet und die Reservierungslogik für die befahrenen Segmente koordiniert.
+
+\section*{Zusammenfassung}
+Die Implementierung kombiniert einfache, gut testbare Datenmodelle mit einer modularen Strategiearchitektur. Die Dijkstra-basierte Pfadfindung wurde an die Besonderheiten des Schienennetzes angepasst und für den Einsatz in Echtzeit-nahen Simulationen optimiert. Die Architektur erlaubt weitere Erweiterungen (z. B. A*-Varianten, inkrementelle Algorithmen) ohne grundlegende Änderungen an Modell oder Steuerung.
+
+% Ende Implementierung

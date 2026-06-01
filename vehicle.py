@@ -4,25 +4,16 @@ from custom_types.EndVector import EndVector
 from view import ItemVehicle
 
 class Vehicle:
-    def __init__(self, scene, segment: BaseSegment, from_end: str, to_end: str, percentage: float = 0, locomotive_length: float = 50, wagons: dict = None):
+    def __init__(self, scene, segment: BaseSegment, from_end: str, to_end: str, percentage: float = 0, locomotive_length: float = 50, wagons_front: list[list[float | EndVector | None]] = None, wagons_rear: list[list[float | EndVector | None]] = None):
         self.position: Tuple[BaseSegment, str, str, float] = (segment, from_end, to_end, percentage) # Segment, from_end, to_end, percentage
         self.speed: float = 0
         self.target_speed: float = 0 # mm/s
-        self.acceleration = 500 # mm/s^2
+        self.acceleration = 2000 # mm/s^2
         self.coords: EndVector = segment.get_coordinates_on_segment(from_end, to_end, percentage)
         self.previous_tag: str | None = None
         self.locomotive_length = 50
-        self.wagons_front: list[list[float | EndVector | None]] = [
-            # [80, None],
-            # [80, None],
-            # [80, None],
-        ]
-        self.wagons_rear: list[list[float | EndVector | None]] = [
-            [80, None],
-            [80, None],
-            [40, None],
-            [40, None],
-        ]
+        self.wagons_front = wagons_front if wagons_front else [] 
+        self.wagons_rear = wagons_rear if wagons_rear else [] 
         self.wagon_spacing = 5
         self.train_length = {
             "front": self.locomotive_length/2 + sum([wagon[0] for wagon in self.wagons_front]) + self.wagon_spacing * len(self.wagons_front),

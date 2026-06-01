@@ -1,0 +1,392 @@
+{
+    "segments": {
+        "4": {
+            "type": "sl",
+            "connections": {
+                "a": "3.b",
+                "b": "5.a",
+                "c": "7.a"
+            },
+            "location": {
+                "a": [
+                    -200.0,
+                    0.0
+                ],
+                "b": [
+                    0.0,
+                    -0.0
+                ],
+                "c": [
+                    0.0,
+                    53.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "b",
+                "length_a.b": 200,
+                "length_a.c": 209.43951023931953,
+                "radius": 400,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    0.0,
+                    0.0,
+                    270
+                ]
+            }
+        },
+        "3": {
+            "type": "sr",
+            "connections": {
+                "a": "2.a",
+                "b": "4.a",
+                "c": "9.a"
+            },
+            "location": {
+                "a": [
+                    -400.0,
+                    0.0
+                ],
+                "b": [
+                    -200.0,
+                    -0.0
+                ],
+                "c": [
+                    -200.0,
+                    -53.59
+                ]
+            },
+            "metadata": {
+                "starting_end": "b",
+                "length_a.b": 200,
+                "length_a.c": 209.43951023931953,
+                "radius": 400,
+                "angle": 30,
+                "dir": "r",
+                "coords": [
+                    -200.0,
+                    -0.0,
+                    270
+                ]
+            }
+        },
+        "5": {
+            "type": "st",
+            "connections": {
+                "a": "4.b",
+                "b": "6.a"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    -0.0
+                ],
+                "b": [
+                    200.0,
+                    0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    0.0,
+                    0.0,
+                    90
+                ]
+            }
+        },
+        "6": {
+            "type": "st",
+            "connections": {
+                "a": "5.b",
+                "b": "12.a"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    -0.0
+                ],
+                "b": [
+                    400.0,
+                    0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    200.0,
+                    -0.0,
+                    90
+                ]
+            }
+        },
+        "7": {
+            "type": "cr",
+            "connections": {
+                "a": "4.c",
+                "b": "8.a"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    53.59
+                ],
+                "b": [
+                    200.0,
+                    107.18
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "length_a.b": 209.43951023931953,
+                "angle": 30,
+                "dir": "r",
+                "coords": [
+                    0.0,
+                    -53.59,
+                    60
+                ]
+            }
+        },
+        "8": {
+            "type": "st",
+            "connections": {
+                "a": "7.b",
+                "b": "13.a"
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    107.18
+                ],
+                "b": [
+                    400.0,
+                    107.18
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    200.0,
+                    -107.18,
+                    90
+                ]
+            }
+        },
+        "9": {
+            "type": "cl",
+            "connections": {
+                "a": "3.c",
+                "b": "10.a"
+            },
+            "location": {
+                "a": [
+                    -200.0,
+                    -53.59
+                ],
+                "b": [
+                    0.0,
+                    -107.18
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "radius": 400,
+                "length_a.b": 209.43951023931953,
+                "angle": 30,
+                "dir": "l",
+                "coords": [
+                    -200.0,
+                    53.59,
+                    120
+                ]
+            }
+        },
+        "10": {
+            "type": "st",
+            "connections": {
+                "a": "9.b",
+                "b": "11.a"
+            },
+            "location": {
+                "a": [
+                    0.0,
+                    -107.18
+                ],
+                "b": [
+                    200.0,
+                    -107.18
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    0.0,
+                    107.18,
+                    90
+                ]
+            }
+        },
+        "2": {
+            "type": "st",
+            "connections": {
+                "a": "3.a",
+                "b": "14.a"
+            },
+            "location": {
+                "a": [
+                    -400.0,
+                    -0.0
+                ],
+                "b": [
+                    -600.0,
+                    -0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    -400.0,
+                    -0.0,
+                    270
+                ]
+            }
+        },
+        "11": {
+            "type": "st",
+            "connections": {
+                "a": "10.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    200.0,
+                    -107.18
+                ],
+                "b": [
+                    400.0,
+                    -107.18
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    200.0,
+                    107.18,
+                    90
+                ]
+            }
+        },
+        "12": {
+            "type": "st",
+            "connections": {
+                "a": "6.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    -0.0
+                ],
+                "b": [
+                    600.0,
+                    0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    400.0,
+                    -0.0,
+                    90
+                ]
+            }
+        },
+        "13": {
+            "type": "st",
+            "connections": {
+                "a": "8.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    400.0,
+                    107.18
+                ],
+                "b": [
+                    600.0,
+                    107.18
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    400.0,
+                    -107.18,
+                    90
+                ]
+            }
+        },
+        "14": {
+            "type": "st",
+            "connections": {
+                "a": "2.b",
+                "b": "15.a"
+            },
+            "location": {
+                "a": [
+                    -600.0,
+                    -0.0
+                ],
+                "b": [
+                    -800.0,
+                    -0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    -600.0,
+                    0.0,
+                    270
+                ]
+            }
+        },
+        "15": {
+            "type": "st",
+            "connections": {
+                "a": "14.b",
+                "b": null
+            },
+            "location": {
+                "a": [
+                    -800.0,
+                    -0.0
+                ],
+                "b": [
+                    -1000.0,
+                    -0.0
+                ]
+            },
+            "metadata": {
+                "starting_end": "a",
+                "length_a.b": 200,
+                "coords": [
+                    -800.0,
+                    0.0,
+                    270
+                ]
+            }
+        }
+    }
+}

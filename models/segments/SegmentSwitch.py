@@ -9,8 +9,8 @@ if TYPE_CHECKING:
     from models.Track import Track
 
 class SegmentSwitch(BaseSegment):
-    def __init__(self, track: "Track", coords: list, length=200, radius = 400, angle = 30, dir: Literal["l", "r"] = "l", starting_end:Literal["a", "b", "c"]="a"):
-        super().__init__(track, starting_end)
+    def __init__(self, track: "Track", coords: list, length=200, radius = 400, angle = 30, dir: Literal["l", "r"] = "l", starting_end:Literal["a", "b", "c"]="a", **kwargs):
+        super().__init__(track, starting_end, **kwargs)
 
         self.metadata = {
             **self.metadata,

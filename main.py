@@ -1,6 +1,6 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QMainWindow, QMenuBar, QFileDialog, QDialog
-from PyQt6.QtGui import QColor, QPainter, QAction
+from PyQt6.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QLineEdit, QMainWindow, QMenuBar, QFileDialog, QDialog, QPushButton, QVBoxLayout
+from PyQt6.QtGui import QColor, QIntValidator, QPainter, QAction
 from PyQt6.QtCore import QTimer
 from models.Track import Track
 from models.VehicleController import VehicleController
@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
         file_menu.addAction(file_open)
 
         route_menu = menubar.addMenu("Simulation")
+        route_menu.addAction("Benutzerdefinierte Simulation starten", self.start_custom_simulation)
 
         self.setMenuBar(menubar)
 
@@ -50,6 +51,31 @@ class MainWindow(QMainWindow):
 
     def simulate(self, delta_t):
         self.track.simulate(delta_t)
+
+    def start_custom_simulation(self):
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Benutzerdefinierte Simulation starten")
+        dialog.setModal(True)
+        dialog.resize(300, 100)
+        dialog_layout = QVBoxLayout()
+        # numeric input for train length (integer)
+        train_min_length_input = QLineEdit()
+        train_min_length_input.setValidator(QIntValidator(1, 10000))
+        train_min_length_input.setPlaceholderText("Minimale Zuglänge (mm)")
+        train_max_length_input = QLineEdit()
+        train_max_length_input.setValidator(QIntValidator(1, 10000))
+        train_max_length_input.setPlaceholderText("Maximale Zuglänge (mm)")
+        num_simulations_input = QLineEdit()
+        num_simulations_input.setValidator(QIntValidator(1, 1000))
+        num_simulations_input.setPlaceholderText("Anzahl der Simulationen")
+        start_button = QPushButton("Starten")
+        dialog_layout.addWidget(train_min_length_input)
+        dialog_layout.addWidget(train_max_length_input)
+        dialog_layout.addWidget(num_simulations_input)
+        dialog_layout.addWidget(start_button)
+        dialog.setLayout(dialog_layout)
+        dialog.exec()
+
 
     def open_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Datei auswählen", "", "JSON Dateien (*.json);;Alle Dateien (*)")

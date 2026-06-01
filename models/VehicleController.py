@@ -1,4 +1,5 @@
 import math
+import random
 
 import networkx as nx
 import threading
@@ -53,7 +54,13 @@ class VehicleController():
 
     def add_vehicle(self, vehicle: Vehicle, vehicle_id: str):
         with self.lock:
-            destination_node = self.track.get_random_end(return_type="end_id")
+            # destination_node = self.track.get_random_end(return_type="end_id")
+            origins_and_destinations = self.track.get_origins_and_destinations()
+            if len(origins_and_destinations["destinations"]) == 0:
+                destination_node = self.track.get_random_end(return_type="end_id")
+            else:
+                rand_index = math.floor(len(origins_and_destinations["destinations"]) * random.random())
+                destination_node = origins_and_destinations["destinations"][rand_index][0]
             print("destination node", destination_node)
             self.vehicles[vehicle_id] = {
                 "vehicle": vehicle,
@@ -112,8 +119,6 @@ class VehicleController():
                 # segment.toggle_switch_setting("b" if "b" in ends else "c")
                 segment.switch_setting = "b" if "b" in ends else "c"
 
-    # def _calculate_braking_start_time(self, vehicle_speed: float, )
-
     def control(self):
         with self.lock:
             for vehicle in self.vehicles.values():
@@ -140,7 +145,7 @@ class VehicleController():
                     ###
 
                     if route is None or len(route) == 0 or (previous_tag not in route[0:1] and reverse_previous_tag not in route[0:1]):
-                        print(f"(re)calculating route from {previous_tag} to {vehicle['destination_node']}. previous tag not in first route element: {route[0] if route else 'None'}, \n route: {route}")
+                        # print(f"(re)calculating route from {previous_tag} to {vehicle['destination_node']}. previous tag not in first route element: {route[0] if route else 'None'}, \n route: {route}")
                         vehicle["route"] = self._get_best_route(
                             vehicle["vehicle"].position[0].get_key(),
                             vehicle["destination_node"].split(".")[0],
@@ -150,17 +155,8 @@ class VehicleController():
                             100,
                             
                         )
-                        print("initial route: ", vehicle["route"])
+                        # print("initial route: ", vehicle["route"])
                         continue
-                    
-                    # print(f"route: {route}\n previous_tag: {previous_tag}\n route[0:2]: {route[0:2]}")
-                    # time.sleep(1)
-                    # if previous_tag == route[0]:
-                    #     # print(f"Vehicle {vehicle['vehicle']} on route, previous tag {previous_tag} matches first route element {route[0]}, setting target speed to {VEHICLE_SPEED}")
-                    #     vehicle["vehicle"].set_target_speed(VEHICLE_SPEED)
-                    # elif reverse_previous_tag == route[0]:
-                    #     # print(f"Vehicle {vehicle['vehicle']} on route, previous tag {previous_tag} matches first route element {route[0]} in reverse direction, setting target speed to {-VEHICLE_SPEED}")
-                    #     vehicle["vehicle"].set_target_speed(-VEHICLE_SPEED)
 
                     if vehicle["arriving"] and abs(vehicle_speed) == VEHICLE_SLOW_SPEED:
                         vehicle["vehicle"].set_target_speed(0)
@@ -170,8 +166,9 @@ class VehicleController():
                         continue
 
                     if vehicle["arriving"] and vehicle["braking_start_time"] is not None and vehicle["vehicle"].target_speed != 0:
-                        if time.time_ns()/1e9 >= vehicle["braking_start_time"]:
+                        if self.track.timer >= vehicle["braking_start_time"]:
                             # print(f"Vehicle starting to brake for arrival at {vehicle['destination_node']}")
+                            # print(f"vehicle starting to brake: {self.track.timer} >= {vehicle['braking_start_time']}")
                             dir = 1 if vehicle_speed > 0 else -1
                             vehicle["vehicle"].set_target_speed(dir * VEHICLE_SLOW_SPEED)
                             continue
@@ -179,34 +176,14 @@ class VehicleController():
                     # if len(route) == 1:
                     self._toggle_switches_on_route(route)
 
-                    # if len(route) > 1 and route[1].split(".")[0] == vehicle["destination_node"].split(".")[0]:
-                    #     # if previous_tag == route[0]:
-                    #     # get length of segment:
-                    #     length = self.track_digraph.nodes.get(previous_tag)["length"]/2 + self.track_digraph.nodes.get(route[1])["length"]/2
-                        
-                    #     v0 = vehicle_speed#
-                    #     a = vehicle["vehicle"].acceleration
-                    #     braking_distance = v0**2/(2*a)
-
-                    #     dist_until_braking = length - braking_distance * (1 - 0.1) # 10 percnet safetiy margin
-                    #     time_until_braking = dist_until_braking / abs(v0) if abs(v0) > 0 else 0
-
-                    #     print(f"Vehicle approaching destination, length until destination: {length}, current speed: {v0}, braking distance: {braking_distance}, time until braking: {time_until_braking}")
-                    #     curr_timestamp = time.time_ns()/1e9
-                    #     vehicle["braking_start_time"] = curr_timestamp + time_until_braking
-                    #     vehicle["arriving"] = True
-
                     if len(route) > 1:    
-                        # print(f"previous tag: {previous_tag}, reverse previous tag: {reverse_previous_tag}")
                         if vehicle_speed == 0:
                             if previous_tag == route[0]:
                                 vehicle["vehicle"].set_target_speed(VEHICLE_SPEED)
                             elif reverse_previous_tag == route[0]:
                                 vehicle["vehicle"].set_target_speed(-VEHICLE_SPEED)
                         elif not vehicle["arriving"] and route[1].split(".")[0] == vehicle["destination_node"].split(".")[0]:
-                            print(f"Next node on route is destination node")
-                            # if previous_tag == route[0]:
-                            # get length of segment:
+                            # print(f"Next node on route is destination node")
                             length = self.track_digraph.nodes.get(previous_tag)["length"]/2 + self.track_digraph.nodes.get(route[1])["length"]/2
                             
                             v0 = vehicle_speed#
@@ -217,7 +194,7 @@ class VehicleController():
                             time_until_braking = dist_until_braking / abs(v0) if abs(v0) > 0 else 0
     
                             print(f"Vehicle approaching destination, length until destination: {length}, current speed: {v0}, braking distance: {braking_distance}, time until braking: {time_until_braking}")
-                            curr_timestamp = time.time_ns()/1e9
+                            curr_timestamp = self.track.timer
                             vehicle["braking_start_time"] = curr_timestamp + time_until_braking
                             vehicle["arriving"] = True
                         elif reverse_previous_tag == route[0]:
@@ -229,162 +206,5 @@ class VehicleController():
                             vehicle["reversed_recently"] = False
 
                         if len(route) > 1 and (previous_tag == route[1]):
-                            print(f"vehicle passed mid-point. previous tag: {previous_tag}, destination: {vehicle['destination_node']}")
-                            # if len(route) > 1 and route[1].split(".")[0] == vehicle["destination_node"].split(".")[0]:
-                            #     # if previous_tag == route[0]:
-                            #     # get length of segment:
-                            #     length = self.track_digraph.nodes.get(previous_tag)["length"]/2 + self.track_digraph.nodes.get(route[1])["length"]/2
-
-                            #     v0 = vehicle_speed#
-                            #     a = vehicle["vehicle"].acceleration
-                            #     braking_distance = v0**2/(2*a)
-
-                            #     dist_until_braking = length - braking_distance * (1 - 0.1) # 10 percnet safetiy margin
-                            #     time_until_braking = dist_until_braking / abs(v0) if abs(v0) > 0 else 0
-
-                            #     print(f"Vehicle approaching destination, length until destination: {length}, current speed: {v0}, braking distance: {braking_distance}, time until braking: {time_until_braking}")
-                            #     curr_timestamp = time.time_ns()/1e9
-                            #     vehicle["braking_start_time"] = curr_timestamp + time_until_braking
-                            #     vehicle["arriving"] = True
+                            # print(f"vehicle passed mid-point. previous tag: {previous_tag}, destination: {vehicle['destination_node']}")
                             vehicle["route"].pop(0)
-
-
-                # check if 
-
-
-
-###########################################
-            # for vehicle in self.vehicles.values():
-            #     # get vehicle last tag
-            #     vehicle["last_tag"] = vehicle["vehicle"].last_tag
-            #     last_tag = vehicle["last_tag"]
-            #     # get neighbors of last tag-node
-            #     if last_tag is None:
-            #         continue
-
-            #     if vehicle["route"] is None:
-            #         vehicle["route"] = self._get_best_route(
-            #             vehicle["vehicle"].position[0].get_key(),
-            #             vehicle["destination_node"].split(".")[0],
-            #             vehicle["vehicle"].position[1] + "_" + vehicle["vehicle"].position[2]
-            #         )
-            #         print("initial route: ", vehicle["route"])
-            #         continue
-
-            #     neighbors = list(self.track_digraph.neighbors(last_tag))
-            #     if last_tag == vehicle["route"][0] and len(vehicle["route"]) > 1:
-            #         vehicle["route"].pop(0)
-                
-            #     if vehicle["arriving"] and last_tag == vehicle["route"][0]:
-            #         vehicle["vehicle"].set_target_speed(0)
-            #         continue
-            #     if len(vehicle["route"]) < 2:
-            #         vehicle["arriving"] = True
-            #         continue
-                
-            #     print(f"route: {vehicle['route']}, last tag: {last_tag}, neighbors: {neighbors}")
-            #     # iterate over neighbors and check if one is first element of route
-            #     if vehicle["route"][0] in neighbors:
-            #         vehicle["vehicle"].set_target_speed(VEHICLE_SPEED)
-            #         vehicle["route"].pop(0)
-            #         break
-            #     opposite_direction = last_tag.split(".")[0] + "." + last_tag.split(".")[1].split("_")[1] + "_" + last_tag.split(".")[1].split("_")[0]
-            #     opposite_direction_neighbors = list(self.track_digraph.neighbors(opposite_direction))
-            #     print("opposite direction: ", opposite_direction)
-            #     print("opposite direction neighbors: ", opposite_direction_neighbors)
-            #     if vehicle["route"][0] in opposite_direction_neighbors:
-            #         vehicle["vehicle"].set_target_speed(-VEHICLE_SPEED)
-            #         vehicle["route"].pop(0)
-            #         break
-
-            #     if vehicle["route"][0] not in neighbors and vehicle["route"][0] not in opposite_direction_neighbors:
-            #         print(f"last tag neigbors: {list(neighbors)} not in first route element: {vehicle['route'][0]}, \n route: {vehicle['route']}")
-            #         vehicle["route"] = self._get_best_route(
-            #             vehicle["vehicle"].position[0].get_key(),
-            #             vehicle["destination_node"].split(".")[0],
-            #             vehicle["vehicle"].position[1] + "_" + vehicle["vehicle"].position[2]
-            #         )
-
-
-################################################
-
-                # for neighbor in neighbors:
-                #     # if so set target speet to 100 percent positve and remove first element of route
-                #     if neighbor == vehicle["route"][0]:
-                #         vehicle["vehicle"].set_target_speed(100)
-                #         # vehicle["route"].pop(0)
-                #         break
-                #     # elif neighbor == vehicle["route"][1]:
-                #     #     vehicle["vehicle"].set_target_speed(100)
-                #     #     vehicle["route"].pop(0)
-                #     #     vehicle["route"].pop(0)
-                #     #     break
-                #     # if not check opposite direction of the last tag is first element of route
-                #     else:
-                #         opposite_direction = last_tag.split(".")[0] + "." + last_tag.split(".")[1] + "_" + last_tag.split(".")[0]
-                #         print("opposite direction: ", opposite_direction)
-                #         if opposite_direction == vehicle["route"][0]:
-                #             vehicle["vehicle"].set_target_speed(-100)
-                #             # vehicle["route"].pop(0)
-                #             break
-                #     # if so set target speed to 100 percent negative and remove first element of route
-                # # else: rerun route calculation and check again
-                # print(f"last tag neigbors: {list(neighbors)} not in first route element: {vehicle['route'][0]}, \n route: {vehicle['route']}")
-                # vehicle["route"] = self._get_best_route(
-                #     vehicle["vehicle"].position[0].get_key(),
-                #     vehicle["destination_node"].split(".")[0],
-                #     vehicle["vehicle"].position[1] + "_" + vehicle["vehicle"].position[2]
-                # )
-
-
-
-
-
-
-
-                
-                # if vehicle["vehicle"].position[0] is not vehicle["last_segment"]:
-
-                #     for i in range(len(vehicle["route"]) -1, -1, -1):
-                #         segment_end_ids = vehicle["route"][i - 1].split("_") + vehicle["route"][i].split("_")
-                #         seen_segments = set()
-                #         ends = {}
-                #         # print("segment_end_ids: ", segment_end_ids)
-                #         for segment_end_id in segment_end_ids:
-                #             if segment_end_id.split(".")[0] in seen_segments:
-                #                 duplicate_segment_id = segment_end_id.split(".")[0]
-                #                 duplicate_segment_end_ids = [segment_end_id.split(".")[1], ends[segment_end_id.split(".")[0]]]
-                #             if segment_end_id != "end":
-                #                 ends[segment_end_id.split(".")[0]] = segment_end_id.split(".")[1]
-                #             seen_segments.add(segment_end_id.split(".")[0])
-                #             # print("seen_segments: ", seen_segments)
-
-                #         # print(duplicate_segment_id)
-                #         switch_segment: BaseSegment = self.track.segments[duplicate_segment_id]
-                #         if isinstance(switch_segment, SegmentSwitch):
-                #             if "c" in duplicate_segment_end_ids:
-                #                 switch_segment.switch_setting = "c"
-                #             elif "b" in duplicate_segment_end_ids:
-                #                 switch_segment.switch_setting = "b"
-
-                #     if vehicle["arriving"]:
-                #         return vehicle["vehicle"].set_target_speed(0)
-                #     v_t_speed = vehicle["vehicle"].target_speed
-                #     v_pos = vehicle["vehicle"].position
-                #     if v_pos[0].ends[v_pos[2]].get_end_id(True) == vehicle["route"][-1]:
-                #         vehicle["arriving"] = True
-                #     origin_end_id = v_pos[0].ends[v_pos[2 if v_t_speed < 0 else 1]].get_end_id(True)
-                #     vehicle["route"] = self._get_best_route(
-                #         origin_end_id,
-                #         vehicle["destination_node"],
-                #     )
-                #     next_edge_id = v_pos[0].ends[v_pos[1 if v_t_speed < 0 else 2]].get_end_id(True)
-                #     if next_edge_id not in set(vehicle["route"]):
-                #         if v_t_speed > 0:
-                #             vehicle["vehicle"].set_target_speed(-200)
-                #         else:
-                #             vehicle["vehicle"].set_target_speed(200)
-
-
-                #     vehicle["last_segment"] = vehicle["vehicle"].position[0]
-
