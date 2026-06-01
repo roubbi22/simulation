@@ -23,7 +23,8 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
+                "length_a.c": 209.43951023931953,
                 "radius": 400,
                 "angle": 30,
                 "dir": "l",
@@ -57,7 +58,8 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
+                "length_a.c": 209.43951023931953,
                 "radius": 400,
                 "angle": 30,
                 "dir": "l",
@@ -91,7 +93,8 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
+                "length_a.c": 209.43951023931953,
                 "radius": 400,
                 "angle": 30,
                 "dir": "l",
@@ -125,7 +128,8 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
+                "length_a.c": 209.43951023931953,
                 "radius": 400,
                 "angle": 30,
                 "dir": "l",
@@ -159,7 +163,8 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
+                "length_a.c": 209.43951023931953,
                 "radius": 400,
                 "angle": 30,
                 "dir": "l",
@@ -189,6 +194,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -217,6 +223,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -245,6 +252,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -273,6 +281,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -301,6 +310,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -328,7 +338,7 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
                 "coords": [
                     600.0,
                     -53.59,
@@ -355,6 +365,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -382,7 +393,7 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
                 "coords": [
                     719.62,
                     -300.0,
@@ -409,6 +420,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -436,7 +448,7 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
                 "coords": [
                     700.0,
                     -573.21,
@@ -462,7 +474,7 @@
             },
             "metadata": {
                 "starting_end": "a",
-                "length": 200,
+                "length_a.b": 200,
                 "coords": [
                     546.41,
                     -800.0,
@@ -489,6 +501,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -517,6 +530,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -545,6 +559,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -573,6 +588,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -601,6 +617,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -629,6 +646,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -657,6 +675,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -685,6 +704,7 @@
             "metadata": {
                 "starting_end": "a",
                 "radius": 400,
+                "length_a.b": 209.43951023931953,
                 "angle": 30,
                 "dir": "l",
                 "coords": [
@@ -717,7 +737,8 @@
             },
             "metadata": {
                 "starting_end": "c",
-                "length": 200,
+                "length_a.b": 200,
+                "length_a.c": 209.43951023931953,
                 "radius": 400,
                 "angle": 30,
                 "dir": "r",

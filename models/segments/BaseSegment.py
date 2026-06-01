@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from models.segments import SegmentEnd
 
 class BaseSegment(ABC):
-    def __init__(self, track: "Track", starting_end = "a"):
+    def __init__(self, track: "Track", starting_end = "a", is_allowed_origin: None | Tuple[int, int] = None, is_allowed_destination: None | Tuple[int, int] = None):
         self.track: "Track" = track
         self.ends: dict[str, "SegmentEnd"] = {}
         self.graphical_representation: GraphicBaseSegment = None
@@ -17,8 +17,8 @@ class BaseSegment(ABC):
             "starting_end": starting_end
         }
         self.annotated = False
-        self.is_allowed_origin: None | Tuple[int, int] = None
-        self.is_allowed_destination: None | Tuple[int, int] = None
+        self.is_allowed_origin: None | Tuple[int, int] = is_allowed_origin
+        self.is_allowed_destination: None | Tuple[int, int] = is_allowed_destination
 
     @abstractmethod
     def update_view(self):

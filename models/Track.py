@@ -1,3 +1,5 @@
+import time
+
 from PyQt6.QtWidgets import QGraphicsScene
 from models.VehicleController import VehicleController
 from models.segments import BaseSegment, SegmentStraight , SegmentCurve, SegmentSwitch, SegmentEnd
@@ -19,6 +21,7 @@ class Track:
         self.altered_since_save = True
         self.file_path = None
         self.vehicle_controller: VehicleController = None
+        self.timer: float = 0
         
     def add_segment(
             self,
@@ -37,11 +40,11 @@ class Track:
 
         if coords:
             match segment_type:
-                case "Gerade": new_segment = SegmentStraight(self, kwargs.get("length_a.b", 200), coords, starting_end=new_segment_starting_end)
-                case "Kurve links": new_segment = SegmentCurve(self, coords, kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "l"), starting_end=new_segment_starting_end)
-                case "Kurve rechts": new_segment = SegmentCurve(self, coords, kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "r"), starting_end=new_segment_starting_end)
-                case "Weiche links": new_segment = SegmentSwitch(self, coords, kwargs.get("length_a.b", 200), kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "l"), starting_end=new_segment_starting_end)
-                case "Weiche rechts": new_segment = SegmentSwitch(self, coords, kwargs.get("length_a.b", 200), kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "r"), starting_end=new_segment_starting_end)
+                case "Gerade": new_segment = SegmentStraight(self, kwargs.get("length_a.b", 200), coords, starting_end=new_segment_starting_end, is_allowed_origin=kwargs.get("is_allowed_origin", None), is_allowed_destination=kwargs.get("is_allowed_destination", None))
+                case "Kurve links": new_segment = SegmentCurve(self, coords, kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "l"), starting_end=new_segment_starting_end, is_allowed_origin=kwargs.get("is_allowed_origin", None), is_allowed_destination=kwargs.get("is_allowed_destination", None))
+                case "Kurve rechts": new_segment = SegmentCurve(self, coords, kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "r"), starting_end=new_segment_starting_end, is_allowed_origin=kwargs.get("is_allowed_origin", None), is_allowed_destination=kwargs.get("is_allowed_destination", None))
+                case "Weiche links": new_segment = SegmentSwitch(self, coords, kwargs.get("length_a.b", 200), kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "l"), starting_end=new_segment_starting_end, is_allowed_origin=kwargs.get("is_allowed_origin", None), is_allowed_destination=kwargs.get("is_allowed_destination", None))
+                case "Weiche rechts": new_segment = SegmentSwitch(self, coords, kwargs.get("length_a.b", 200), kwargs.get("radius", 400), kwargs.get("angle", 30), kwargs.get("dir", "r"), starting_end=new_segment_starting_end, is_allowed_origin=kwargs.get("is_allowed_origin", None), is_allowed_destination=kwargs.get("is_allowed_destination", None))
 
             if segment_end:
                 segment_end.connected_to = new_segment.ends[new_segment_starting_end]
@@ -158,6 +161,10 @@ class Track:
             output[key]["type"] = segment_type
             output[key]["connections"] = connections
             output[key]["location"] = location
+            if segment.is_allowed_origin is not None:
+                output[key]["is_allowed_origin"] = segment.is_allowed_origin
+            if segment.is_allowed_destination is not None:
+                output[key]["is_allowed_destination"] = segment.is_allowed_destination
             if include_meta:
                 output[key]["metadata"] = segment.metadata
         
@@ -202,6 +209,8 @@ class Track:
                 "coords": segment["metadata"]["coords"],
                 "segment_type": segment_types[segment["type"]],
                 "new_segment_starting_end": segment["metadata"].get("starting_end", "a"),
+                "is_allowed_origin": segment.get("is_allowed_origin", None),
+                "is_allowed_destination": segment.get("is_allowed_destination", None),
             }
 
             additional_kwargs = {
@@ -330,8 +339,67 @@ class Track:
         G.add_edges_from(edges)
         
         return G
+    
+    def get_origins_and_destinations(self) -> dict:
+        origins = []
+        destinantions = []
 
-    def simulate(self, delta_t: float = 1/30):
+        for segment in self.segments.values():
+            if segment.is_allowed_origin is not None:
+                origins.append((segment.get_key(), segment.is_allowed_origin))
+            if segment.is_allowed_destination is not None:
+                destinantions.append((segment.get_key(), segment.is_allowed_destination))
+
+        return {"origins": origins, "destinations": destinantions}
+    
+    def run_automatic_simulation(self, delta_t: float = 1/100, min_train_length: int = 100, max_train_length: int = 500, num_simulations: int = 1000):
+        for _ in range(num_simulations):
+            start_time = time.time_ns()
+            origins_and_destinations = self.get_origins_and_destinations()
+            if not origins_and_destinations["origins"] or not origins_and_destinations["destinations"]:
+                print("No allowed origins or destinations defined.")
+                return
+            origin_segment_key, origin_end = random.choice(origins_and_destinations["origins"])
+            destination_segment_key, destination_end = random.choice(origins_and_destinations["destinations"])
+            while origin_segment_key == destination_segment_key:
+                destination_segment_key, destination_end = random.choice(origins_and_destinations["destinations"])
+            
+            # add random vehicle
+            min_locomotive_length = 30
+            max_locomotive_length = 60
+            min_wagon_length = 30
+            max_wagon_length = 80
+            wagon_spacing = 5
+
+            # get random number between min_locomotive_length and max_locomotive_length that is a multiple of 5
+            locomotive_length = random.randint(min_locomotive_length // 5, max_locomotive_length // 5) * 5
+            total_train_length = random.randint(min_train_length, max_train_length)
+            current_train_length = locomotive_length
+            wagons_front = []
+            wagons_rear = []
+            while current_train_length < total_train_length:
+                new_wagon_length = random.randint(min_wagon_length // 5, max_wagon_length // 5) * 5 + 5 # add random wagon length and spacing
+                if current_train_length + new_wagon_length <= total_train_length:
+                    wagons_rear.append([new_wagon_length, None])
+                    current_train_length += new_wagon_length
+                else:
+                    break
+            
+            vehicle = Vehicle(
+                track=self,
+                position=(self.segments[origin_segment_key], origin_end, destination_end, 0),
+                locomotive_length=locomotive_length,
+                wagons_front=wagons_front,
+                wagons_rear=wagons_rear,
+            )
+
+            self.add_vehicle(vehicle)
+            
+
+
+
+    def simulate(self, delta_t: float = 1/100):
+        self.timer += delta_t
         for vehicle in self.vehicles.values():
             self.vehicle_controller.control()
             vehicle.update(delta_t=delta_t)

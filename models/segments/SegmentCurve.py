@@ -10,8 +10,8 @@ if TYPE_CHECKING:
     from models.Track import Track
 
 class SegmentCurve(BaseSegment):
-    def __init__(self, track: "Track", coords: list, radius = 400, angle = 30, dir: Literal["l", "r"] = "l", starting_end:Literal["a", "b"]="a"):
-        super().__init__(track, starting_end)
+    def __init__(self, track: "Track", coords: list, radius = 400, angle = 30, dir: Literal["l", "r"] = "l", starting_end:Literal["a", "b"]="a", **kwargs):
+        super().__init__(track, starting_end, **kwargs)
         self.metadata = {
             **self.metadata,
             "radius": radius,

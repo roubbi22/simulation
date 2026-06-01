@@ -209,7 +209,7 @@ class GraphicBaseSegment(QGraphicsPathItem):
     
     def _add_vehicle(self):
         from vehicle import Vehicle
-        vehicle = Vehicle(scene=self.scene, segment=self.model, from_end="a", to_end="b", percentage=0.5)
+        vehicle = Vehicle(scene=self.scene, segment=self.model, from_end="a", to_end="b", percentage=0.5, wagons_rear=[[70, None], [70, None], [70, None]])
         self.model.track.add_vehicle(vehicle)
 
 
