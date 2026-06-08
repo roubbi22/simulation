@@ -44,7 +44,7 @@ python main.py
 - to remove rail-segments, right-click on the segment and choose "Segment entfernen"
 - to save the track, click on "Datei" and then "Datei speichern"
 - to set start or end point, right-click on the desired segment and choose "Startpunkt setzen" or "Endpunkt setzen"
-- to place a train, right-click on the desired segment and choose "Zug platzieren" - make sure that enough rail-segments are available at the disired location to fit the train in its entirety (currently hardcoded to contain locomotive and 3 wagons behind that need approximately 2 segments)
+- to place a train, right-click on the desired segment and choose "Fahrzeug platzieren" - make sure that enough rail-segments are available at the disired location to fit the train in its entirety (currently hardcoded to contain locomotive and 3 wagons behind that need approximately 2 segments)
   - when a train is placed and the track contains one ore many segments, marked as "is_allowed_destination" ("Zielpunkt"), the train will automatically start progressing towards one randomly chosen allowed destination - if no allowed destination is set in the track, the train will choose a random segment within the track as its destination
 - switches are set automatically when a train approaches them, however it is possible to toggle switches manually by right-clicking on the switch and choosing "Weiche umstellen"
 
