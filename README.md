@@ -1,9 +1,13 @@
 # initialize project
 
+all terminal commands must be executed from the root of the project directory, i.e. in `simulation/`.
+
 ## requirements
 python needs to be installed on the system
 
 tested with python 3.14
+
+all 
 
 ## create virtual environment
 ```bash
